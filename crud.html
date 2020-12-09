@@ -1,0 +1,107 @@
+<html>
+
+<head>
+  <title>Read, Write, Update, Delete Data Firebase JS</title>
+  <!-- <link href="style.css" rel="stylesheet"> -->
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css">
+</head>
+
+<body>
+  <div class="container">
+    <br>
+    <div class="row">
+      <div class="col">
+        Id <input id="rollbox" type="text" class="form-control"></input><br><br>
+      </div>
+      <div class="col">
+        Name <input id="namebox" type="text" class="form-control"></input><br><br>
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="col">
+        Section <input id="secbox" type="text" class="form-control"></input><br><br>
+      </div>
+      <div class="col">
+        Gender <input id="genbox" type="text" class="form-control"></input><br>
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="col">
+        <button id="insert" class='btn btn-sm btn-primary rounded shadow'>INSERT</button>
+        <button id="select" class='btn btn-sm btn-primary rounded shadow'>SELECT</button>
+        <button id="update" class='btn btn-sm btn-primary rounded shadow'>UPDATE</button>
+        <button id="delete" class='btn btn-sm btn-primary rounded shadow'>DELETE</button>
+      </div>
+    </div>
+
+    <script src="https://www.gstatic.com/firebasejs/8.1.2/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.1.2/firebase-auth.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.1.2/firebase-database.js"></script>
+  </div>>
+</body>
+
+<script id="MainScript">
+  // Your web app's Firebase configuration
+  var firebaseConfig = {
+    apiKey: "AIzaSyCC7gHoioKVMJxpozqQpk0YDX1krEEtbgg",
+    authDomain: "web-test-e4133.firebaseapp.com",
+    databaseURL: "https://web-test-e4133.firebaseio.com",
+    projectId: "web-test-e4133",
+    storageBucket: "web-test-e4133.appspot.com",
+    messagingSenderId: "141825461007",
+    appId: "1:141825461007:web:a738ff9491b83882cf8c7a"
+  };
+  // Initialize Firebase
+  firebase.initializeApp(firebaseConfig);
+
+
+  //------------------------------Read Data-----------------------//
+  var nameV, rollV, secV, genV;
+  function Ready() {
+    nameV = document.getElementById('namebox').value;
+    rollV = document.getElementById('rollbox').value;
+    secV = document.getElementById('secbox').value;
+    genV = document.getElementById('genbox').value;
+  }
+
+  //------------------------------Insert Process-----------------------//
+  document.getElementById('insert').onclick = function () {
+    Ready();
+    firebase.database().ref('student/' + rollV).set({
+      NameOfStudent: nameV,
+      RollNo: rollV,
+      Section: secV,
+      Gender: genV
+    });
+  }
+
+  //------------------------------Select Process-----------------------//
+  document.getElementById('select').onclick = function () {
+    Ready();
+    firebase.database().ref('student/' + rollV).on('value', function (snapshot) {
+      document.getElementById('namebox').value = snapshot.val().NameOfStudent;
+      document.getElementById('secbox').value = snapshot.val().Section;
+      document.getElementById('genbox').value = snapshot.val().Gender;
+    });
+  }
+
+  //------------------------------Update Process-----------------------//
+  document.getElementById('update').onclick = function () {
+    Ready();
+    firebase.database().ref('student/' + rollV).update({
+      NameOfStudent: nameV,
+      Section: secV,
+      Gender: genV
+    });
+  }
+
+  //------------------------------Delete Process-----------------------//
+  document.getElementById('update').onclick = function () {
+    Ready();
+    firebase.database().ref('student/' + rollV).remove();
+  }
+</script>
+
+</html>
