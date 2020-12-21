@@ -1,0 +1,422 @@
+<html>
+
+<head>
+  <title>FIREBASE CLOUD FIRESTORE</title>
+  <!-- <link href="style.css" rel="stylesheet"> -->
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css">
+</head>
+
+<body>
+  <div class="container">
+    <div class="row">
+      <div class="col">
+        <button onclick="insert()" id="signIn" class="btn btn-lg btn-primary btn-block text-uppercase">Insert</button>
+      </div>
+    </div>
+
+    <script src="https://www.gstatic.com/firebasejs/8.2.1/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.2.1/firebase-auth.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.2.1/firebase-firestore.js"></script>
+  </div>>
+</body>
+
+<script id="MainScript">
+  // Your web app's Firebase configuration
+  // For Firebase JS SDK v7.20.0 and later, measurementId is optional
+  var firebaseConfig = {
+    apiKey: "AIzaSyAqXuVYulfjVRD-8riTWDEd5PD8Nch_x2M",
+    authDomain: "health-fooducate.firebaseapp.com",
+    projectId: "health-fooducate",
+    storageBucket: "health-fooducate.appspot.com",
+    messagingSenderId: "698437255481",
+    appId: "1:698437255481:web:2ef891d2deeed5c6fde8e8",
+    measurementId: "G-Y5SDV2F5VD"
+  };
+  // Initialize Firebase
+  firebase.initializeApp(firebaseConfig);
+  //firebase.analytics();
+
+
+
+  var fruitlist = [
+    {
+      "food": "Apple",
+      "weightInGrams": 86,
+      "ediblePortion": 65,
+      "measure": "1/2 of 8 cm diameter or 1 (6cm diameter)"
+    },
+    {
+      "food": "Atis (3)",
+      "weightInGrams": 70,
+      "ediblePortion": 45,
+      "measure": "1 (5 cm diameter)"
+    },
+    {
+      "food": "Balimbing (1)",
+      "weightInGrams": 153,
+      "ediblePortion": 135,
+      "measure": "1-1/2 of 9 x 5 cm"
+    },
+    {
+      "food": "Banana:",
+      "weightInGrams": null,
+      "ediblePortion": null,
+      "measure": ""
+    },
+    {
+      "food": "Lakatan",
+      "weightInGrams": 51,
+      "ediblePortion": 40,
+      "measure": "1 (9 x 3 cm)"
+    },
+    {
+      "food": "Latundan",
+      "weightInGrams": 55,
+      "ediblePortion": 40,
+      "measure": "1 (9x 3 cm)"
+    },
+    {
+      "food": "Saba",
+      "weightInGrams": 70,
+      "ediblePortion": 40,
+      "measure": "1 (10 x 4 cm)"
+    },
+    {
+      "food": "Cashew (3)",
+      "weightInGrams": 78,
+      "ediblePortion": 70,
+      "measure": "1 (7 x 6-1/2 cm)"
+    },
+    {
+      "food": "Chico",
+      "weightInGrams": 54,
+      "ediblePortion": 45,
+      "measure": "1 (4 cm diameter)"
+    },
+    {
+      "food": "Dalanghita (3)",
+      "weightInGrams": 300,
+      "ediblePortion": 135,
+      "measure": "2 (6 diameter each)"
+    },
+    {
+      "food": "Datiles (1)(3)",
+      "weightInGrams": 61,
+      "ediblePortion": 50,
+      "measure": "1 cup"
+    },
+    {
+      "food": "Duhat",
+      "weightInGrams": 80,
+      "ediblePortion": 60,
+      "measure": "20 (2cm diameter each"
+    },
+    {
+      "food": "Durian",
+      "weightInGrams": 150,
+      "ediblePortion": 30,
+      "measure": "1 segment of 6-1/2 x 4-1/2 cm"
+    },
+    {
+      "food": "Grapes (1)",
+      "weightInGrams": 69,
+      "ediblePortion": 55,
+      "measure": "10 (2 cm diameter each) or 4 (3 cm diameter each)"
+    },
+    {
+      "food": "Guava (1)(3)",
+      "weightInGrams": 81,
+      "ediblePortion": 80,
+      "measure": "2 (4 cm diameter each)"
+    },
+    {
+      "food": "Guwayabano (3)",
+      "weightInGrams": 86,
+      "ediblePortion": 60,
+      "measure": "1 slice (8 x 6 x 2 cm) or 1/2 cup"
+    },
+    {
+      "food": "Jackfruit ripe",
+      "weightInGrams": 118,
+      "ediblePortion": 40,
+      "measure": "3 segments (6 cm diameter each)"
+    },
+    {
+      "food": "Kamachile (3)",
+      "weightInGrams": 110,
+      "ediblePortion": 55,
+      "measure": "7 pods"
+    },
+    {
+      "food": "Lansones",
+      "weightInGrams": 103,
+      "ediblePortion": 70,
+      "measure": "7 (4 x 2 cm each)"
+    },
+    {
+      "food": "Lychees",
+      "weightInGrams": 77,
+      "ediblePortion": 50,
+      "measure": "5( 2 cm diameter each)"
+    },
+    {
+      "food": "Mabolo (1)",
+      "weightInGrams": 83,
+      "ediblePortion": 50,
+      "measure": "2/3 of 6 cm diameter)"
+    },
+    {
+      "food": "Makopa (1)",
+      "weightInGrams": 169,
+      "ediblePortion": 135,
+      "measure": "3 (4 cm diameter each)"
+    },
+    {
+      "food": "Mango:",
+      "weightInGrams": null,
+      "ediblePortion": null,
+      "measure": ""
+    },
+    {
+      "food": "Green (3)",
+      "weightInGrams": 90,
+      "ediblePortion": 65,
+      "measure": "1 slice (11 x 6 cm)"
+    },
+    {
+      "food": "Medium ripe",
+      "weightInGrams": 90,
+      "ediblePortion": 65,
+      "measure": "1 slice (11 x 6 cm)"
+    },
+    {
+      "food": "Ripe (2)(3)",
+      "weightInGrams": 103,
+      "ediblePortion": 60,
+      "measure": "1 slice (12 x 7 cm) or 1/2 cup cubed"
+    },
+    {
+      "food": "Indian",
+      "weightInGrams": 140,
+      "ediblePortion": 80,
+      "measure": "1 (6 cm diameter)"
+    },
+    {
+      "food": "Mangosteen (1)",
+      "weightInGrams": 212,
+      "ediblePortion": 55,
+      "measure": "3 (6 cm diameter each)"
+    },
+    {
+      "food": "Marang",
+      "weightInGrams": 45,
+      "ediblePortion": 35,
+      "measure": "1/2 of 12 x 10 cm"
+    },
+    {
+      "food": "Melon",
+      "weightInGrams": 317,
+      "ediblePortion": 200,
+      "measure": "1 slice (12 x 10 x 3 cm) or 1-1/3 cup�"
+    },
+    {
+      "food": "Papaya ripe (2)(3)",
+      "weightInGrams": 133,
+      "ediblePortion": 85,
+      "measure": "1 slice (10 x 6 x 2 cm) or 3/4 cup"
+    },
+    {
+      "food": "Pear (1)",
+      "weightInGrams": 118,
+      "ediblePortion": 85,
+      "measure": "1 (6 cm diameter)"
+    },
+    {
+      "food": "Pineapple",
+      "weightInGrams": 129,
+      "ediblePortion": 75,
+      "measure": "1slice (10 x 6 x 2 cm) or 1/2 cup"
+    },
+    {
+      "food": "Rambutan",
+      "weightInGrams": 139,
+      "ediblePortion": 50,
+      "measure": "8 (3 cm diameter each)"
+    },
+    {
+      "food": "Santol (1)",
+      "weightInGrams": 127,
+      "ediblePortion": 75,
+      "measure": "1 (7 cm diameter)"
+    },
+    {
+      "food": "Singkamas tubber",
+      "weightInGrams": 124,
+      "ediblePortion": 110,
+      "measure": "1/2 of 9 cm diameter or 1 cup"
+    },
+    {
+      "food": "Siniguelas",
+      "weightInGrams": 78,
+      "ediblePortion": 50,
+      "measure": "5 (3 cm diameter each)"
+    },
+    {
+      "food": "Star apple",
+      "weightInGrams": 123,
+      "ediblePortion": 65,
+      "measure": "1/2 of 6 cm diameter"
+    },
+    {
+      "food": "Strawberry (1)(3)",
+      "weightInGrams": 168,
+      "ediblePortion": 165,
+      "measure": "1-1/4 cups"
+    },
+    {
+      "food": "Suha (3)",
+      "weightInGrams": 160,
+      "ediblePortion": 90,
+      "measure": "3 segments (8 x 4 x3 cm each)"
+    },
+    {
+      "food": "Tamarind, ripe",
+      "weightInGrams": 34,
+      "ediblePortion": 15,
+      "measure": "2 of 6 segments each"
+    },
+    {
+      "food": "Tiesa (1)(2)(3)",
+      "weightInGrams": 41,
+      "ediblePortion": 30,
+      "measure": "1/4 of 10 cm diameter"
+    },
+    {
+      "food": "Watermelon (1)",
+      "weightInGrams": 226,
+      "ediblePortion": 140,
+      "measure": "1 slice (12 x 6 x 3 cm) or 1 cup"
+    },
+    {
+      "food": "Apple sauce",
+      "weightInGrams": null,
+      "ediblePortion": 45,
+      "measure": "3 tablespoons"
+    },
+    {
+      "food": "Fruit cocktail",
+      "weightInGrams": null,
+      "ediblePortion": 40,
+      "measure": "3 tablespoons"
+    },
+    {
+      "food": "Peach halves",
+      "weightInGrams": null,
+      "ediblePortion": 65,
+      "measure": "1-1/3 halves"
+    },
+    {
+      "food": "Pineapple, crushed",
+      "weightInGrams": null,
+      "ediblePortion": 60,
+      "measure": "3 tablespoons"
+    },
+    {
+      "food": "Pineapple, sliced",
+      "weightInGrams": null,
+      "ediblePortion": 35,
+      "measure": "1 slice (7 cm diameter)"
+    },
+    {
+      "food": "Champoy, salted",
+      "weightInGrams": null,
+      "ediblePortion": 10,
+      "measure": "4 (2 cm diameter each)"
+    },
+    {
+      "food": "Mango chips",
+      "weightInGrams": null,
+      "ediblePortion": 10,
+      "measure": "2 (2 x 8 cm each)"
+    },
+    {
+      "food": "Prunes seedles",
+      "weightInGrams": null,
+      "ediblePortion": 15,
+      "measure": "3 pieces"
+    },
+    {
+      "food": "Raisins seedles",
+      "weightInGrams": null,
+      "ediblePortion": 15,
+      "measure": "2 tablesppons"
+    },
+    {
+      "food": "Sweetened (apple, mango, pineapple-grapefruit,pineapple-orange)",
+      "weightInGrams": null,
+      "ediblePortion": 60,
+      "measure": "1/4 cup"
+    },
+    {
+      "food": "Unsweetened (orange,pineapple, prune)",
+      "weightInGrams": null,
+      "ediblePortion": 80,
+      "measure": "1/3 cup"
+    },
+    {
+      "food": "Bottled (sweetened):",
+      "weightInGrams": null,
+      "ediblePortion": null,
+      "measure": ""
+    },
+    {
+      "food": "Orange, guwayabano, mango",
+      "weightInGrams": null,
+      "ediblePortion": 80,
+      "measure": "1/3 cup"
+    },
+    {
+      "food": "Banana cue",
+      "weightInGrams": null,
+      "ediblePortion": 20,
+      "measure": "1/2 of 9-1/2 x 4 cm"
+    },
+    {
+      "food": "Buko water",
+      "weightInGrams": null,
+      "ediblePortion": 180,
+      "measure": "1 cup"
+    },
+    {
+      "food": "Maruya",
+      "weightInGrams": null,
+      "ediblePortion": 20,
+      "measure": "1/4 of 10-1/2 x 9 -1/2 x 1 cm"
+    },
+    {
+      "food": "Turon",
+      "weightInGrams": null,
+      "ediblePortion": 20,
+      "measure": "1/2 of 9-1/2x3-1/2 x 1 cm"
+    }
+  ];
+
+  var fruitlistCount = fruitlist.length;
+  function insert() {
+    for (i = 0; i < fruitlistCount; i++) {
+      firebase.firestore()
+        .collection("fruitlist")
+        .add(fruitlist[i])
+        .then(function () {
+          console.log("Document successfully written!");
+          alert("Document successfully written");
+        })
+        .catch(function (error) {
+          console.error("Error writing document: ", error);
+          alert("Error writing document: ", error);
+        });
+    }
+  }
+</script>
+
+</html>
