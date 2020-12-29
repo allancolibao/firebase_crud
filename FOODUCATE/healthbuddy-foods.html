@@ -1,0 +1,549 @@
+<html>
+
+<head>
+  <title>FIREBASE CLOUD FIRESTORE</title>
+  <!-- <link href="style.css" rel="stylesheet"> -->
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css">
+</head>
+
+<body>
+  <div class="container">
+    <br>
+    <div class="row">
+      <div class="col">
+        Name <input id="name" type="text" class="form-control" required></input><br><br>
+      </div>
+      <div class="col">
+        Disease <input id="disease" type="text" class="form-control" required></input><br><br>
+      </div>
+      <div class="col">
+        Category <input id="category" type="test" class="form-control" required></input><br><br>
+      </div>
+      <div class="col">
+        Description <input id="description" type="text" class="form-control" required></input><br>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col">
+        <button onclick="insert()" id="insert" class="btn btn-lg btn-primary btn-block text-uppercase">Insert</button>
+        <!-- <button onclick="upload()" id="upload" class="btn btn-lg btn-primary btn-block text-uppercase">Upload</button> -->
+      </div>
+    </div>
+    <br>
+
+    <div class="content">
+      <form id="add-cafe-form">
+        <!-- <ul id="cafe-list"></ul> -->
+
+        <table id="cafe-list" border="1">
+          <tr>
+            <th>NAME</th>
+            <th>DISEASE</th>
+            <th>CATEGORY</th>
+            <th>DESCRIPTION</th>
+          </tr>
+          <tr>
+            <td id="cafe-list">
+            </td>
+          </tr>
+        </table>
+      </form>
+    </div>
+
+    <script src="https://www.gstatic.com/firebasejs/8.2.1/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.2.1/firebase-auth.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.2.1/firebase-firestore.js"></script>
+  </div>
+</body>
+
+<script id="MainScript">
+  // Your web app's Firebase configuration
+  // For Firebase JS SDK v7.20.0 and later, measurementId is optional
+  var firebaseConfig = {
+    apiKey: "AIzaSyAqXuVYulfjVRD-8riTWDEd5PD8Nch_x2M",
+    authDomain: "health-fooducate.firebaseapp.com",
+    projectId: "health-fooducate",
+    storageBucket: "health-fooducate.appspot.com",
+    messagingSenderId: "698437255481",
+    appId: "1:698437255481:web:2ef891d2deeed5c6fde8e8",
+    measurementId: "G-Y5SDV2F5VD"
+  };
+  // Initialize Firebase
+  firebase.initializeApp(firebaseConfig);
+  //firebase.analytics();
+
+
+
+  var foods = [
+
+    {
+      "name": "starches",
+      "disease": "Diabetes",
+      "category": "foods to eat",
+      "description": [
+        "Whole grains, such as brown rice, oatmeal, quinoa, millet, or amaranth",
+        "Baked sweet potato",
+        "Items made with whole grains and no (or very little) added sugar"
+      ]
+    },
+    {
+      "name": "Vegetables",
+      "disease": "Diabetes",
+      "category": "foods to eat",
+      "description": [
+        "Fresh veggies, eaten raw or lightly steamed, roasted, or grilled",
+        "Plain frozen vegetables, lightly steamed",
+        "Greens such as kale, spinach, and arugula. Iceberg lettuce is not as great because its low in nutrients.",
+        "Low sodium or unsalted canned vegetables"
+      ]
+    },
+    {
+      "name": "Fruits",
+      "disease": "Diabetes",
+      "category": "foods to eat",
+      "description": [
+        "Fresh fruit",
+        "Plain frozen fruit or fruit canned without added sugar",
+        "Sugar-free or low-sugar jam or preserves",
+        "No-sugar-added applesauce"
+      ]
+    },
+    {
+      "name": "Protein",
+      "disease": "Diabetes",
+      "category": "foods to eat",
+      "description": [
+        "Plant-based proteins such as beans, nuts, seeds, or tofu",
+        "Fish and seafood",
+        "Chicken and other poultry (Choose the breast meat if possible.)",
+        "Eggs and low-fat dairy"
+      ]
+    },
+    {
+      "name": "Dairy",
+      "disease": "Diabetes",
+      "category": "foods to eat",
+      "description": [
+        "1% or skim milk",
+        "Low-fat yogurt",
+        "Low-fat cottage cheese",
+        "Low-fat or non-fat sour cream"
+      ]
+    },
+    {
+      "name": "Drinks",
+      "disease": "Diabetes",
+      "category": "foods to eat",
+      "description": [
+        "Unflavoured water or flavoured sparkling water",
+        "Unsweetened tea with or without a slice of lemon",
+        "Light beer, small amounts of wine, or non-fruity mixed drinks",
+        "Coffee, black or with added low-fat milk and sugar substitute"
+      ]
+    },
+    {
+      "name": "Fats, Oils, and Sweets",
+      "disease": "Diabetes",
+      "category": "foods to eat",
+      "description": [
+        "Natural sources of vegetable fats, such as nuts, seeds, or avocados (high in calories, so keep portions small)",
+        "Foods that give you omega-3 fatty acids, such as salmon, tuna, or mackerel",
+        "Plant-based oils, such as canola, grape seed, or olive oils"
+      ]
+    },
+    {
+      "name": "starches",
+      "disease": "Diabetes",
+      "category": "foods to avoid",
+      "description": [
+        "Processed grains, such as white rice or white flour",
+        "Cereals with little whole grains and lots of sugar",
+        "White bread",
+        "French fries",
+        "Fried white-flour tortillas"
+      ]
+    },
+    {
+      "name": "Vegetables",
+      "disease": "Diabetes",
+      "category": "foods to avoid",
+      "description": [
+        "Canned vegetables with lots of added sodium",
+        "Veggies cooked with lots of added butter, cheese, or sauce",
+        "Pickles, if you need to limit sodium. Otherwise, pickles are OK.",
+        "Sauerkraut, for the same reason as pickles. Limit them if you have high blood pressure."
+      ]
+    },
+    {
+      "name": "Fruits",
+      "disease": "Diabetes",
+      "category": "foods to avoid",
+      "description": [
+        "Canned fruit with heavy sugar syrup",
+        "Chewy fruit rolls",
+        "Regular jam, jelly, and preserves (unless you have a very small portion)",
+        "Sweetened applesauce",
+        "Fruit punch, fruit drinks, fruit juice drinks"
+      ]
+    },
+    {
+      "name": "Protein",
+      "disease": "Diabetes",
+      "category": "foods to avoid",
+      "description": [
+        "Fried meats",
+        "Higher-fat cuts of meat, such as ribs",
+        "Pork bacon",
+        "Regular cheese",
+        "Poultry with skin",
+        "Deep-fried fish",
+        "Deep-fried tofu",
+        "Beans prepared with lard"
+      ]
+    },
+    {
+      "name": "Dairy",
+      "disease": "Diabetes",
+      "category": "foods to avoid",
+      "description": [
+        "Whole milk",
+        "Regular yogurt",
+        "Regular cottage cheese",
+        "Regular sour cream",
+        "Regular ice cream",
+        "Regular half-and-half"
+      ]
+    },
+    {
+      "name": "Fats, Oils, and Sweets",
+      "disease": "Diabetes",
+      "category": "foods to avoid",
+      "description": [
+        "Anything with trans-fat in it. It's bad for your heart. Check the ingredient list for anything thats partially hydrogenated even if the label says it has 0 grams of Trans fat",
+        "Big portions of saturated fats, which mainly come from animal products but also are in coconut oil and palm oil. Ask your doctor what your limit should be, especially if you have heart disease as well as diabetes."
+      ]
+    },
+    {
+      "name": "Drinks",
+      "disease": "Diabetes",
+      "category": "foods to avoid",
+      "description": [
+        "Regular sodas",
+        "Regular beer, fruity mixed drinks, dessert wines",
+        "Sweetened tea",
+        "Coffee with sugar and cream",
+        "Flavoured coffees and chocolate drinks",
+        "Energy drinks"
+      ]
+    },
+    {
+      "name": "Rich in grains (7- 8 daily serving)",
+      "disease": "HB",
+      "category": "foods to eat",
+      "description": [
+        "breads",
+        "cooked rice",
+        "pasta",
+        "dry cereal"
+      ]
+    },
+    {
+      "name": "Fruits (4-5 daily servings)",
+      "disease": "HB",
+      "category": "foods to eat",
+      "description": [
+        "medium fruit",
+        "fresh or frozen fruit",
+        "dried fruit",
+        "fruit juice"
+      ]
+    },
+    {
+      "name": "vegetables ( 4-5 daily servings)",
+      "disease": "HB",
+      "category": "foods to eat",
+      "description": [
+        "raw leafy greens",
+        "cooked vegetable"
+      ]
+    },
+    {
+      "name": "low- fat dairy products ( 2-3 daily servings)",
+      "disease": "HB",
+      "category": "foods to eat",
+      "description": [
+        "milk",
+        "yogurt",
+        "cheese"
+      ]
+    },
+    {
+      "name": "Lean meat, poultry, and fish (2 or fewer servings a day)",
+      "disease": "HB",
+      "category": "foods to eat",
+      "description": ""
+    },
+    {
+      "name": "Nuts, seeds, legumes (4-5 serving per week)",
+      "disease": "HB",
+      "category": "foods to eat",
+      "description": ""
+    },
+    {
+      "name": "Fats and oils (2-3 daily servings)",
+      "disease": "HB",
+      "category": "foods to eat",
+      "description": [
+        "vegetable oil or soft margarine",
+        "low-fat mayonnaise",
+        "light salad dressing"
+      ]
+    },
+    {
+      "name": "Foods high in potassium, magnesium, and fiber:",
+      "disease": "HB",
+      "category": "foods to eat",
+      "description": [
+        "apples",
+        "apricots",
+        "bananas",
+        "beet greens",
+        "broccoli",
+        "carrots",
+        "collards",
+        "green beans",
+        "dates",
+        "grapes",
+        "green peas",
+        "kale",
+        "lima beans",
+        "mangoes",
+        "melons",
+        "oranges",
+        "peaches",
+        "pineapples",
+        "potatoes",
+        "raisins",
+        "spinach",
+        "squash",
+        "strawberries",
+        "sweet potatoes",
+        "tangerines",
+        "tomatoes",
+        "tuna",
+        "yogurt (fat-free)"
+      ]
+    },
+    {
+      "name": "Reduce Salt (Sodium)\n- Aim for less than 2,000 milligrams each day.\n- Use salt-free seasonings\n-  Avoid foods that have 20% or more Daily value of sodium",
+      "disease": "HB",
+      "category": "foods to avoid",
+      "description": [
+        "Canned foods",
+        "Processed foods",
+        "Fatty meats",
+        "fast foods"
+      ]
+    },
+    {
+      "name": "Alcoholic beverages",
+      "disease": "HB",
+      "category": "foods to avoid",
+      "description": ""
+    },
+    {
+      "name": "reduce sugar\n(AHA recommends daily added sugar limits)\n",
+      "disease": "HB",
+      "category": "foods to avoid",
+      "description": [
+        "Recommended 5 teaspoons per day both for female and male adults"
+      ]
+    }
+  ];
+
+  var foodsV2 = [
+    {
+      "name": "Rich in fiber: (20-30 grams each day)",
+      "disease": "Pulmonary",
+      "category": "foods to eat",
+      "description": [
+        "Bran",
+        "Potatoes with skin",
+        "Lentils",
+        "Quinoa",
+        "Beans",
+        "Oats",
+        "Barley"
+      ]
+    },
+    {
+      "name": "Rich in Proteins: (at least twice a day)",
+      "disease": "Pulmonary",
+      "category": "foods to eat",
+      "description": [
+        "Eggs",
+        "Grass-fed Meat",
+        "Fish ( Salmon, Mackerel and Sardines)",
+        "Pastured Poultry",
+        "Cheese",
+        "Milk"
+      ]
+    },
+    {
+      "name": "Mono- and poly-unsaturated fats:",
+      "disease": "Pulmonary",
+      "category": "foods to eat",
+      "description": [
+        "Vegetable oils ( olive oil, coconut oil and avocado oil)",
+        "Nuts",
+        "Fish ( Salmon, Mackerel and Sardines)"
+      ]
+    },
+    {
+      "name": "Rich in potassium: ",
+      "disease": "Pulmonary",
+      "category": "foods to eat",
+      "description": [
+        "Avocados",
+        "Dark leafy greens",
+        "Tomatoes",
+        "Asparagus",
+        "Beets",
+        "Potatoes",
+        "Bananas",
+        "Oranges"
+      ]
+    },
+    {
+      "name": "Drinks: (6-8 glasses per day)",
+      "disease": "Pulmonary",
+      "category": "foods to eat",
+      "description": [
+        "Water"
+      ]
+    },
+    {
+      "name": "Foods that contain trans fats and saturated fats:",
+      "disease": "Pulmonary",
+      "category": "foods to avoid",
+      "description": [
+        "Butter",
+        "Lard",
+        "fat and skin from meat",
+        "hydrogenated vegetable oils",
+        "fried foods",
+        "cookies",
+        "crackers",
+        "pastries"
+      ]
+    },
+    {
+      "name": "Some Fruits:",
+      "disease": "Pulmonary",
+      "category": "foods to avoid",
+      "description": [
+        "Apricots",
+        "Peaches",
+        "Melons",
+        "Apples"
+      ]
+    },
+    {
+      "name": "Vegetables and legumes: ",
+      "disease": "Pulmonary",
+      "category": "foods to avoid",
+      "description": [
+        "Beans",
+        "Brussels sprout",
+        "Cabbage",
+        "Cauliflower",
+        "Corn",
+        "Leeks",
+        "Some lentils",
+        "Onions",
+        "peas"
+      ]
+    },
+    {
+      "name": "Foods that contain carbohydrates:",
+      "disease": "Pulmonary",
+      "category": "foods to avoid",
+      "description": [
+        "table sugar",
+        "chocolate and candy",
+        "cakes and other sugary desserts",
+        "sugary drinks",
+        "processed foods (cold cuts)",
+        "white bread and pasta"
+      ]
+    },
+    {
+      "name": "Drinks:",
+      "disease": "Pulmonary",
+      "category": "foods to avoid",
+      "description": [
+        "Coffee",
+        "Alcohol beverages"
+      ]
+    }
+  ];
+
+  function upload() {
+
+    var fruitlistCount = foods.length;
+    for (i = 0; i < fruitlistCount; i++) {
+
+      firebase.firestore()
+        .collection("foods")
+        .add(foodsV2[i])
+        .then(function () {
+          console.log("Document successfully written!");
+          // alert("Document successfully written");
+        })
+        .catch(function (error) {
+          console.error("Error writing document: ", error);
+          alert("Error writing document: ", error);
+        });
+
+    }
+  }
+
+  // firebase.firestore().collection("foods").get().then(function (querySnapshot) {
+  //   querySnapshot.forEach(function (doc) {
+  //     console.log(doc.data());
+  //   });
+  // });
+
+  const cafeList = document.querySelector("#cafe-list");
+
+  function renderCafe(doc) {
+    let li = document.createElement('tr');
+    let name = document.createElement('td');
+    let disease = document.createElement('td');
+    let category = document.createElement('td');
+    let description = document.createElement('td');
+
+    li.setAttribute('data-id', doc.id);
+    name.textContent = doc.data().name;
+    disease.textContent = doc.data().disease;
+    category.textContent = doc.data().category;
+    description.textContent = doc.data().description;
+    // description.textContent = doc.data().description.length > 0 ? doc.data().description.map(data => { return data }):"";
+
+    li.append(name);
+    li.append(disease);
+    li.append(category);
+    li.append(description);
+    cafeList.appendChild(li);
+  }
+
+  firebase.firestore().collection("foods").get().then((snapshot) => {
+    snapshot.docs.forEach(doc => {
+      renderCafe(doc);
+      // console.log(doc.data().description);
+    })
+  })
+
+</script>
+
+</html>
