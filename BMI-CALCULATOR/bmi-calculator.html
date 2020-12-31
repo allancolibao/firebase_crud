@@ -36,7 +36,7 @@
         Your BMI : <span id="measure"></span><br>
         Ideal Weight : <span id="idealWeight"></span><br>
         Fat : <span id="Fat"></span><br>
-        Calories : <span id="Calories"></span><br>
+        Calories : <span id="calories"></span><br>
       </div>
     </div>
   </div>
@@ -51,40 +51,129 @@
     var height = document.getElementById('height').value;
     var years = document.getElementById('age').value;
     var kg = document.getElementById('weight').value;
-    var cm = document.getElementById('height').value / 100;
-    var m2 = cm * cm;
-    var bmi = kg / m2;
+    var heightToCm = document.getElementById('height').value / 100;
+    var m2 = heightToCm * heightToCm;
+    var bmi = kg / m2; //result of bmi
     // console.log('kg ' + kg + ' m2 ' + m2);
-  
-    if (bmi < 16) {
-      console.log('Very Severly Underweight');
-      document.getElementById('measure').innerHTML = bmi.toFixed(2);
+
+    //Tanhauser's Formula for Desirable Body Weight
+    var heightInCm = parseInt(document.getElementById('height').value) - 100; //(height in cm - 100)
+    var heightInCmKg = heightInCm * 0.10; //(height in cm - 100) * 10%
+    var dbw = heightInCm - heightInCmKg;
+    document.getElementById('idealWeight').innerHTML = dbw.toFixed(2);
+    // console.log(heightInCm + ' ' + heightInCmKg + ' ' + dbw);
+
+    switch (true) {
+      case bmi < 16:
+        var kcal = newdbw * 35;
+        console.log('Very Severly Underweight, ' + 'new dbw ' + newdbw + ' ' + ' kcal ' + kcal);
+        document.getElementById('measure').innerHTML = bmi.toFixed(1);
+        document.getElementById('calories').innerHTML = kcal.toFixed(2);
+        break;
+
+      case bmi == 16 || bmi <= 17:
+        var newdbw = dbw * 0.10;
+        var kcal = newdbw * 35;
+        console.log('Severly Underweight, ' + 'new dbw ' + newdbw + ' ' + ' kcal ' + kcal);
+        document.getElementById('measure').innerHTML = bmi.toFixed(1);
+        document.getElementById('calories').innerHTML = kcal.toFixed(2);
+        break;
+
+      case bmi <= 17 || bmi <= 18.5:
+        var newdbw = dbw * 0.10;
+        var kcal = newdbw * 35;
+        console.log('Underweight, ' + 'new dbw ' + newdbw + ' ' + ' kcal ' + kcal);
+        document.getElementById('measure').innerHTML = bmi.toFixed(1);
+        document.getElementById('calories').innerHTML = kcal.toFixed(2);
+        break;
+
+      case bmi <= 18.5 || bmi <= 24.9:
+        var newdbw = dbw; //as is dbw
+        var kcal = newdbw * 30;
+        console.log('Normal, ' + 'new dbw ' + newdbw + ' ' + ' kcal ' + kcal);
+        document.getElementById('measure').innerHTML = bmi.toFixed(1);
+        document.getElementById('calories').innerHTML = kcal.toFixed(2);
+        break;
+
+      case bmi <= 25 || bmi <= 29.9:
+        var newdbw = dbw + ((dbw * 0.10) * -1);
+        var kcal = newdbw * 25;
+        console.log('Overweight, ' + 'new dbw ' + newdbw + ' ' + ' kcal ' + kcal);
+        document.getElementById('measure').innerHTML = bmi.toFixed(1);
+        document.getElementById('calories').innerHTML = kcal.toFixed(2);
+        break;
+
+      case bmi > 30:
+        var newdbw = dbw + ((dbw * 0.10) * -1);
+        var kcal = newdbw * 25;
+        console.log('Obesity, ' + 'new dbw ' + newdbw + ' ' + ' kcal ' + kcal);
+        document.getElementById('measure').innerHTML = bmi.toFixed(1);
+        document.getElementById('calories').innerHTML = kcal.toFixed(2);
+        break;
+
+      default:
+        text = "can't compute";
+
     }
-    else
-      if (bmi == 16 || bmi <= 17) {
-        console.log('Severly Underweight');
-        document.getElementById('measure').innerHTML = bmi.toFixed(2);
-      }
-      else
-        if (bmi <= 17 || bmi <= 18.5) {
-          console.log('Underweight');
+    /**
+        if (bmi < 16) {
+          var newdbw = dbw * 0.10;
+          var kcal = newdbw * 35;
+          console.log('Very Severly Underweight, ' + 'new dbw ' + newdbw + ' ' + ' kcal ' + kcal);
           document.getElementById('measure').innerHTML = bmi.toFixed(2);
+          document.getElementById('calories').innerHTML = kcal.toFixed(2);
         }
         else
-          if (bmi <= 18.5 || bmi <= 24.9) {
-            console.log('Normal');
+          if (bmi == 16 || bmi <= 17) {
+            var newdbw = dbw * 0.10;
+            var kcal = newdbw * 35;
+            console.log('Severly Underweight, ' + 'new dbw ' + newdbw + ' ' + ' kcal ' + kcal);
             document.getElementById('measure').innerHTML = bmi.toFixed(2);
+            document.getElementById('calories').innerHTML = kcal.toFixed(2);
           }
           else
-            if (bmi <= 25 || bmi <= 29.9) {
-              console.log('Overweight');
+            if (bmi <= 17 || bmi <= 18.5) {
+              var newdbw = dbw * 0.10;
+              var kcal = newdbw * 35;
+              console.log('Underweight, ' + 'new dbw ' + newdbw + ' ' + ' kcal ' + kcal);
               document.getElementById('measure').innerHTML = bmi.toFixed(2);
+              document.getElementById('calories').innerHTML = kcal.toFixed(2);
             }
             else
-              if (bmi > 30) {
-                console.log('Obesity');
+              if (bmi <= 18.5 || bmi <= 24.9) {
+                //CALORIES
+                var newdbw = dbw; //as is dbw
+                var kcal = newdbw * 30;
+                console.log('Normal, ' + 'new dbw ' + newdbw + ' ' + ' kcal ' + kcal);
+                //CALORIES
+    
+    
                 document.getElementById('measure').innerHTML = bmi.toFixed(2);
+                document.getElementById('calories').innerHTML = kcal.toFixed(2);
               }
+              else
+                if (bmi <= 25 || bmi <= 29.9) {
+                  var newdbw = dbw + ((dbw * 0.10) * -1);
+                  var kcal = newdbw * 25;
+                  console.log('Overweight, ' + 'new dbw ' + newdbw + ' ' + ' kcal ' + kcal);
+                  document.getElementById('measure').innerHTML = bmi.toFixed(2);
+                  document.getElementById('calories').innerHTML = kcal.toFixed(2);
+                }
+                else
+                  if (bmi > 30) {
+                    var newdbw = dbw + ((dbw * 0.10) * -1);
+                    var kcal = newdbw * 25;
+                    console.log('Obesity, ' + 'new dbw ' + newdbw + ' ' + ' kcal ' + kcal);
+                    document.getElementById('measure').innerHTML = bmi.toFixed(2);
+                    document.getElementById('calories').innerHTML = kcal.toFixed(2);
+                  }
+    **/
+
+    var carbohydrates = (kcal * 0.6) / 4;
+    var protein = (kcal * 0.15) / 4;
+    var fat = (kcal * 0.25) / 9;
+    console.log('carbohydrates :' + carbohydrates + ' protein :' + protein + ' fat :' + fat);
+
   }
 </script>
 
