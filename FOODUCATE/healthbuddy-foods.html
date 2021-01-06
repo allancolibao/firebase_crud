@@ -27,6 +27,11 @@
       <div class="col">
         <button onclick="insert()" id="insert" class="btn btn-lg btn-primary btn-block text-uppercase">Insert</button>
         <!-- <button onclick="upload()" id="upload" class="btn btn-lg btn-primary btn-block text-uppercase">Upload</button> -->
+        <!-- <button onclick="uploadFoodExchangeList()" id="uploadFoodExchangeList"
+          class="btn btn-lg btn-primary btn-block text-uppercase">Upload Food Exchange List</button> -->
+        <button onclick="uploadFoodList()" id="uploadFoodList"
+          class="btn btn-lg btn-primary btn-block text-uppercase">Upload Food List</button>
+
       </div>
     </div>
     <br>
@@ -35,16 +40,12 @@
       <form id="add-cafe-form">
         <!-- <ul id="cafe-list"></ul> -->
 
-        <table id="cafe-list" border="1">
+        <table id="cafe-list" class="table table-hover nowrap table-sm">
           <tr>
             <th>NAME</th>
             <th>DISEASE</th>
             <th>CATEGORY</th>
             <th>DESCRIPTION</th>
-          </tr>
-          <tr>
-            <td id="cafe-list">
-            </td>
           </tr>
         </table>
       </form>
@@ -73,6 +74,126 @@
   //firebase.analytics();
 
 
+
+  var foodexchangelist = [
+    {
+      "food": "Vegetable A",
+      "category": "",
+      "measure": "1 cup Raw or 1/2 cup, cooked",
+      "carbohydratesInGrams": "",
+      "protienInGrams": "",
+      "fatInGrams": "",
+      "energyInCalories": ""
+    },
+    {
+      "food": "Vegetable A",
+      "category": "",
+      "measure": "2 cups Raw or 1 cup, cooked",
+      "carbohydratesInGrams": "3",
+      "protienInGrams": "1",
+      "fatInGrams": "",
+      "energyInCalories": "16"
+    },
+    {
+      "food": "Vegetable B",
+      "category": "",
+      "measure": "1/2 cup, raw or 1/2 cup, cooked",
+      "carbohydratesInGrams": "3",
+      "protienInGrams": "1",
+      "fatInGrams": "",
+      "energyInCalories": "16"
+    },
+    {
+      "food": "FRUIT",
+      "category": "",
+      "measure": "Varies( Refer to fruit sheet)",
+      "carbohydratesInGrams": "10",
+      "protienInGrams": "",
+      "fatInGrams": "",
+      "energyInCalories": "40"
+    },
+    {
+      "food": "MILK",
+      "category": "    Whole",
+      "measure": "Varies( Refer to Milk sheet)",
+      "carbohydratesInGrams": "12",
+      "protienInGrams": "8",
+      "fatInGrams": "10",
+      "energyInCalories": "170"
+    },
+    {
+      "food": "MILK",
+      "category": "    low fat",
+      "measure": "4 Table spoon",
+      "carbohydratesInGrams": "12",
+      "protienInGrams": "8",
+      "fatInGrams": "5",
+      "energyInCalories": "125"
+    },
+    {
+      "food": "MILK",
+      "category": "   skimmed",
+      "measure": "Varies( Refer to Milk sheet)",
+      "carbohydratesInGrams": "12",
+      "protienInGrams": "8",
+      "fatInGrams": "tr",
+      "energyInCalories": "80"
+    },
+    {
+      "food": "RICE",
+      "category": "",
+      "measure": "Varies( Refer to Rice sheet)",
+      "carbohydratesInGrams": "23",
+      "protienInGrams": "2",
+      "fatInGrams": "",
+      "energyInCalories": "100"
+    },
+    {
+      "food": "Meat",
+      "category": "    low fat",
+      "measure": "Varies( Refer to Meat sheet)",
+      "carbohydratesInGrams": "",
+      "protienInGrams": "8",
+      "fatInGrams": "1",
+      "energyInCalories": "41"
+    },
+    {
+      "food": "Meat",
+      "category": "    medium fat",
+      "measure": "Varies( Refer to Meat sheet)",
+      "carbohydratesInGrams": "",
+      "protienInGrams": "8",
+      "fatInGrams": "6",
+      "energyInCalories": "86"
+    },
+    {
+      "food": "Meat",
+      "category": "    high fat",
+      "measure": "Varies( Refer to Meat sheet)",
+      "carbohydratesInGrams": "",
+      "protienInGrams": "8",
+      "fatInGrams": "10",
+      "energyInCalories": "122"
+    },
+    {
+      "food": "FAT",
+      "category": "",
+      "measure": "1 teaspoon",
+      "carbohydratesInGrams": "",
+      "protienInGrams": "",
+      "fatInGrams": "5",
+      "energyInCalories": "45"
+    },
+    {
+      "food": "SUGAR",
+      "category": "",
+      "measure": "1 teaspoon",
+      "carbohydratesInGrams": "5",
+      "protienInGrams": "",
+      "fatInGrams": "",
+      "energyInCalories": "20"
+    }
+  ];
 
   var foods = [
 
@@ -489,7 +610,6 @@
   ];
 
   function upload() {
-
     var fruitlistCount = foods.length;
     for (i = 0; i < fruitlistCount; i++) {
 
@@ -508,6 +628,134 @@
     }
   }
 
+  function uploadFoodExchangeList() {
+    var foodExchangeListCount = foodexchangelist.length;
+    for (i = 0; i < foodExchangeListCount; i++) {
+
+      // console.log(foodexchangelist[i]);
+      firebase.firestore()
+        .collection("foodexhangelist")
+        .add(foodexchangelist[i])
+        .then(function () {
+          console.log("Document successfully written!");
+          // alert("Document successfully written");
+        })
+        .catch(function (error) {
+          console.error("Error writing document: ", error);
+          // alert("Error writing document: ", error);
+        });
+
+    }
+  }
+
+  var foodList1 = [
+    {
+      "foodexcode": 5,
+      "food": "Whole milk",
+      "category": "Milk, Evaporated, undiluted",
+      "ediblePortion": 125,
+      "weighInGrams": "",
+      "measure": "1/2 cup"
+    },
+    {
+      "foodexcode": 5,
+      "food": "Whole milk",
+      "category": "Milk, evaporated, filled",
+      "ediblePortion": 125,
+      "weighInGrams": "",
+      "measure": "1/2 cup"
+    },
+    {
+      "foodexcode": 5,
+      "food": "Whole milk",
+      "category": "Milk, recombinedf",
+      "ediblePortion": 125,
+      "weighInGrams": "",
+      "measure": "1/2 cup"
+    },
+    {
+      "foodexcode": 5,
+      "food": "Whole milk",
+      "category": "Milk, Fresh carabao",
+      "ediblePortion": 250,
+      "weighInGrams": "",
+      "measure": "1 cup"
+    },
+    {
+      "foodexcode": 5,
+      "food": "Whole milk",
+      "category": "Milk, Fresh, Cow",
+      "ediblePortion": 250,
+      "weighInGrams": "",
+      "measure": "1 cup"
+    },
+    {
+      "foodexcode": 5,
+      "food": "Whole milk",
+      "category": "Milk powdered",
+      "ediblePortion": 30,
+      "weighInGrams": "",
+      "measure": "1/4 cup or 4 tbsp"
+    },
+    {
+      "foodexcode": 5,
+      "food": "Low fat Milk",
+      "category": "Powdered",
+      "ediblePortion": 30,
+      "weighInGrams": "",
+      "measure": "1/4 cup"
+    },
+    {
+      "foodexcode": 5,
+      "food": "Low fat Milk",
+      "category": "Low fat milk",
+      "ediblePortion": 250,
+      "weighInGrams": "",
+      "measure": "1 glass"
+    },
+    {
+      "foodexcode": 5,
+      "food": "Skimmed (non-fat)",
+      "category": "Buttermilk liquid",
+      "ediblePortion": 185,
+      "weighInGrams": "",
+      "measure": "2/3 cup"
+    },
+    {
+      "foodexcode": 5,
+      "food": "Skimmed (non-fat)",
+      "category": "Buttermilk powdered",
+      "ediblePortion": 25,
+      "weighInGrams": "",
+      "measure": "1/4 cu["
+    },
+    {
+      "foodexcode": 5,
+      "food": "Skimmed (non-fat)",
+      "category": "yoghurt",
+      "ediblePortion": 125,
+      "weighInGrams": "",
+      "measure": "1/2 cup"
+    }
+  ];
+
+  function uploadFoodList() {
+    var foodListCount = foodList1.length;
+    for (i = 0; i < foodListCount; i++) {
+      firebase.firestore()
+        .collection("foodlist")
+        .add(foodList1[i])
+        .then(function () {
+          console.log("Document successfully written!");
+          // alert("Document successfully written");
+        })
+        .catch(function (error) {
+          console.error("Error writing document: ", error);
+          // alert("Error writing document: ", error);
+        });
+
+    }
+  }
   // firebase.firestore().collection("foods").get().then(function (querySnapshot) {
   //   querySnapshot.forEach(function (doc) {
   //     console.log(doc.data());
