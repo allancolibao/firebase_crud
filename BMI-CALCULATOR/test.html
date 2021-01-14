@@ -1,0 +1,424 @@
+<html>
+
+<head>
+  <title>FIREBASE CLOUD FIRESTORE</title>
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css">
+  <link rel="stylesheet" src="css/css.css">
+</head>
+
+<body>
+  <div class="container">
+    <br>
+    <div class="row">
+      <div class="col">
+        Age <input id="age" type="number" class="form-control" placeholder="years" required></input><br><br>
+      </div>
+      <div class="col">
+        Height <input id="height" type="number" class="form-control" placeholder="cm" required></input><br><br>
+      </div>
+      <div class="col">
+        Weight <input id="weight" type="number" class="form-control" placeholder="kg" required></input><br><br>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col">
+        <button onclick="computeBMI()" id="computeBMI" class="btn btn-lg btn-primary btn-block text-uppercase">Compute
+          BMI</button>
+      </div>
+    </div>
+    <br>
+    <div class="row">
+      <div class="col">
+        Your BMI : <span id="measure"></span><br>
+        Ideal Weight : <span id="idealWeight"></span><br>
+        Calories : <span id="calories"></span><br>
+        <hr>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col">
+        Carbohydrate : <span id="carbohydrates"></span><br>
+        Protein : <span id="protein"></span><br>
+        Fat : <span id="fat"></span><br>
+      </div>
+    </div>
+    <br>
+    <div class="row">
+      <table id="food-list" class="table nowrap table-sm">
+        <tr>
+          <th>FOOD</th>
+          <th>MEASURE/S</th>
+          <th>CARBOHYDRATES</th>
+          <th>PROTEIN</th>
+          <th>FAT</th>
+          <th>ENERGY</th>
+        </tr>
+        <!-- <tr>
+          <td>VEGETABLE A</td>
+          <td>...</td>
+          <td>...</td>
+          <td>...</td>
+          <td>...</td>
+          <td>...</td>
+        </tr>
+        <tr>
+          <td>VEGETABLE A</td>
+          <td>...</td>
+          <td>...</td>
+          <td>...</td>
+          <td>...</td>
+          <td>...</td>
+        </tr>
+        <tr>
+          <td>VEGETABLE B</td>
+          <td>...</td>
+          <td>...</td>
+          <td>...</td>
+          <td>...</td>
+          <td>...</td>
+        </tr> -->
+        <!-- <tr>
+          <td id="fruit-list">FRUIT</td>
+          <td>...</td>
+          <td>...</td>
+          <td>...</td>
+          <td>...</td>
+          <td>...</td>
+        </tr> -->
+        <tr>
+          <td colspan="6">MILK</td>
+        </tr>
+        <tr>
+          <td colspan="6">MEAT</td>
+        </tr>
+        <!--<tr>
+          <td align="center">low fat</td>
+          <td>...</td>
+          <td>...</td>
+          <td>...</td>
+          <td>...</td>
+          <td>...</td>
+        </tr>
+        <tr>
+          <td align="center">medium fat</td>
+          <td>...</td>
+          <td>...</td>
+          <td>...</td>
+          <td>...</td>
+          <td>...</td>
+        </tr>
+        <tr>
+          <td align="center">high fat</td>
+          <td>...</td>
+          <td>...</td>
+          <td>...</td>
+          <td>...</td>
+          <td>...</td>
+        </tr>
+        <tr>
+          <td>FAT</td>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td></td>
+        </tr>
+        <tr>
+          <td>SUGAR</td>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td></td>
+        </tr> -->
+      </table>
+    </div>
+  </div>
+  <script src="https://www.gstatic.com/firebasejs/8.2.1/firebase-app.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/8.2.1/firebase-auth.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/8.2.1/firebase-firestore.js"></script>
+</body>
+
+<script id="MainScript">
+  // Your web app's Firebase configuration
+  // For Firebase JS SDK v7.20.0 and later, measurementId is optional
+  var firebaseConfig = {
+    apiKey: "AIzaSyAqXuVYulfjVRD-8riTWDEd5PD8Nch_x2M",
+    authDomain: "health-fooducate.firebaseapp.com",
+    projectId: "health-fooducate",
+    storageBucket: "health-fooducate.appspot.com",
+    messagingSenderId: "698437255481",
+    appId: "1:698437255481:web:2ef891d2deeed5c6fde8e8",
+    measurementId: "G-Y5SDV2F5VD"
+  };
+  // Initialize Firebase
+  firebase.initializeApp(firebaseConfig);
+  //firebase.analytics();
+
+  db = firebase.firestore();
+  var carbohydrates, protein, fat;
+
+  function computeBMI() {
+    var height = document.getElementById('height').value;
+    var years = document.getElementById('age').value;
+    var kg = document.getElementById('weight').value;
+    var heightToCm = document.getElementById('height').value / 100;
+    var m2 = heightToCm * heightToCm;
+    var bmi = kg / m2; //result of bmi
+    // console.log('kg ' + kg + ' m2 ' + m2);
+
+    //Tanhauser's Formula for Desirable Body Weight
+    var heightInCm = parseInt(document.getElementById('height').value) - 100; //(height in cm - 100)
+    var heightInCmKg = heightInCm * 0.10; //(height in cm - 100) * 10%
+    var dbw = heightInCm - heightInCmKg;
+    document.getElementById('idealWeight').innerHTML = dbw.toFixed(2);
+    // console.log(heightInCm + ' ' + heightInCmKg + ' ' + dbw);
+
+    switch (true) {
+      case bmi < 16:
+        var kcal = newdbw * 35;
+        console.log('Very Severly Underweight, ' + 'new dbw ' + newdbw + ' ' + ' kcal ' + kcal);
+        document.getElementById('measure').innerHTML = bmi.toFixed(1);
+        document.getElementById('calories').innerHTML = kcal.toFixed(2);
+        break;
+
+      case bmi == 16 || bmi <= 17:
+        var newdbw = dbw * 0.10;
+        var kcal = newdbw * 35;
+        console.log('Severly Underweight, ' + 'new dbw ' + newdbw + ' ' + ' kcal ' + kcal);
+        document.getElementById('measure').innerHTML = bmi.toFixed(1);
+        document.getElementById('calories').innerHTML = kcal.toFixed(2);
+        break;
+
+      case bmi <= 17 || bmi <= 18.5:
+        var newdbw = dbw * 0.10;
+        var kcal = newdbw * 35;
+        console.log('Underweight, ' + 'new dbw ' + newdbw + ' ' + ' kcal ' + kcal);
+        document.getElementById('measure').innerHTML = bmi.toFixed(1);
+        document.getElementById('calories').innerHTML = kcal.toFixed(2);
+        break;
+
+      case bmi <= 18.5 || bmi <= 24.9:
+        var newdbw = dbw; //as is dbw
+        var kcal = newdbw * 30;
+        console.log('Normal, ' + 'new dbw ' + newdbw + ' ' + ' kcal ' + kcal);
+        document.getElementById('measure').innerHTML = bmi.toFixed(1);
+        document.getElementById('calories').innerHTML = kcal.toFixed(2);
+        break;
+
+      case bmi <= 25 || bmi <= 29.9:
+        var newdbw = dbw + ((dbw * 0.10) * -1);
+        var kcal = newdbw * 25;
+        console.log('Overweight, ' + 'new dbw ' + newdbw + ' ' + ' kcal ' + kcal);
+        document.getElementById('measure').innerHTML = bmi.toFixed(1);
+        document.getElementById('calories').innerHTML = kcal.toFixed(2);
+        break;
+
+      case bmi > 30:
+        var newdbw = dbw + ((dbw * 0.10) * -1);
+        var kcal = newdbw * 25;
+        console.log('Obesity, ' + 'new dbw ' + newdbw + ' ' + ' kcal ' + kcal);
+        document.getElementById('measure').innerHTML = bmi.toFixed(1);
+        document.getElementById('calories').innerHTML = kcal.toFixed(2);
+        break;
+
+      default:
+        text = "can't compute";
+
+    }
+
+    carbohydrates = (kcal * 0.6) / 4;
+    proteins = (kcal * 0.15) / 4;
+    fats = (kcal * 0.25) / 9;
+    console.log('carbohydrates :' + carbohydrates + ' protein :' + protein + ' fat :' + fat);
+    document.getElementById('carbohydrates').innerHTML = carbohydrates.toFixed(2);
+    document.getElementById('protein').innerHTML = proteins.toFixed(2);
+    document.getElementById('fat').innerHTML = fats.toFixed(2);
+
+    var collection = db.collection("foodlist")
+    console.log(carbohydrates);
+    var wholemilk = collection
+      .where('nameCategory', '==', 'Whole milk')
+      .where('ediblePortion', '<=', carbohydrates + 50)
+      .where('ediblePortion', '>=', (carbohydrates - 50))
+      // .limit(1)
+      .get().then((snapshot) => {
+        snapshot.docs.forEach(doc => {
+          renderWholeMilk(doc);
+        })
+      })
+
+    // var skimmedmilk = collection
+    //   .where('nameCategory', '==', 'Skimmed (non-fat)')
+    //   .where('ediblePortion', '<=', carbohydrates + 50)
+    //   .where('ediblePortion', '>=', (carbohydrates - 50))
+    //   .limit(1)
+    //   .get().then((snapshot) => {
+    //     snapshot.docs.forEach(doc => {
+    //       renderSkimmedMilk(doc);
+    //     })
+    //   })
+
+    // var lowfat = collection
+    //   .where('nameCategory', '==', 'Low fat Milk')
+    //   .where('ediblePortion', '<=', carbohydrates + 50)
+    //   .where('ediblePortion', '>=', (carbohydrates - 50))
+    //   .limit(1)
+    //   .get().then((snapshot) => {
+    //     snapshot.docs.forEach(doc => {
+    //       renderLowFat(doc);
+    //     })
+    //   })
+
+    // var rice = collection
+    //   .where('nameCategory', '==', 'Rice')
+    //   .where('ediblePortion', '<=', fat + 50)
+    //   .where('ediblePortion', '>=', (carbohydrates - 50))
+    //   .limit(1)
+    //   .get().then((snapshot) => {
+    //     snapshot.docs.forEach(doc => {
+    //       renderRice(doc);
+    //     })
+    //   })
+
+    // var meat = collection
+    //   .where('nameCategory', '==', 'Meat')
+    //   .where('ediblePortion', '<=', fats + 10)
+    //   .where('ediblePortion', '>=', (fats - 10))
+    //   .limit(1)
+    //   .get().then((snapshot) => {
+    //     snapshot.docs.forEach(doc => {
+    //       renderMeat(doc);
+    //     })
+    //   })
+  }
+
+  const foodlist = document.querySelector("#food-list");
+  function renderWholeMilk(doc) {
+    let tr = document.createElement('tr');
+    let food = document.createElement('td');
+    let measure = document.createElement('td');
+    let carbohydrates = document.createElement('td');
+    let protein = document.createElement('td');
+    let fat = document.createElement('td');
+    let calories = document.createElement('td');
+
+    tr.setAttribute('data-id', doc.id);
+    food.textContent = doc.data().food;
+    measure.textContent = doc.data().measure;
+    carbohydrates.textContent = doc.data().ediblePortion;
+    protein.textContent = '-';
+    fat.textContent = '-';
+    calories.textContent = doc.data().ediblePortion * 4;
+
+    tr.append(food);
+    tr.append(measure);
+    tr.append(carbohydrates);
+    tr.append(protein);
+    tr.append(fat);
+    tr.append(calories);
+    foodlist.appendChild(tr);
+  }
+  function renderSkimmedMilk(doc) {
+    let tr = document.createElement('tr');
+    let food = document.createElement('td');
+    let measure = document.createElement('td');
+    let carbohydrates = document.createElement('td');
+    let protein = document.createElement('td');
+    let fat = document.createElement('td');
+    let calories = document.createElement('td');
+
+    tr.setAttribute('data-id', doc.id);
+    food.textContent = doc.data().food;
+    measure.textContent = doc.data().measure;
+    carbohydrates.textContent = doc.data().ediblePortion;
+    protein.textContent = '-';
+    fat.textContent = '-';
+    calories.textContent = doc.data().ediblePortion * 4;
+
+    tr.append(food);
+    tr.append(measure);
+    tr.append(carbohydrates);
+    tr.append(protein);
+    tr.append(fat);
+    tr.append(calories);
+    foodlist.appendChild(tr);
+  }
+  function renderLowFat(doc) {
+    let tr = document.createElement('tr');
+    let food = document.createElement('td');
+    let measure = document.createElement('td');
+    let carbohydrates = document.createElement('td');
+    let protein = document.createElement('td');
+    let fat = document.createElement('td');
+    let calories = document.createElement('td');
+
+    tr.setAttribute('data-id', doc.id);
+    food.textContent = doc.data().food;
+    measure.textContent = doc.data().measure;
+    carbohydrates.textContent = doc.data().ediblePortion;
+    protein.textContent = '-';
+    fat.textContent = '-';
+    calories.textContent = doc.data().ediblePortion * 4;
+
+    tr.append(food);
+    tr.append(measure);
+    tr.append(carbohydrates);
+    tr.append(protein);
+    tr.append(fat);
+    tr.append(calories);
+    foodlist.appendChild(tr);
+  }
+  function renderRice(doc) {
+    let tr = document.createElement('tr');
+    let food = document.createElement('td');
+    let measure = document.createElement('td');
+    let carbohydrates = document.createElement('td');
+    let protein = document.createElement('td');
+    let fat = document.createElement('td');
+    let calories = document.createElement('td');
+
+    tr.setAttribute('data-id', doc.id);
+    food.textContent = doc.data().food;
+    measure.textContent = doc.data().measure;
+    carbohydrates.textContent = doc.data().ediblePortion;
+    protein.textContent = (doc.data().ediblePortion / 23);
+    fat.textContent = '-';
+    calories.textContent = doc.data().ediblePortion * 4;
+
+    tr.append(food);
+    tr.append(measure);
+    tr.append(carbohydrates);
+    tr.append(protein);
+    tr.append(fat);
+    tr.append(calories);
+    foodlist.appendChild(tr);
+  }
+  function renderMeat(doc) {
+    let tr = document.createElement('tr');
+    let food = document.createElement('td');
+    let measure = document.createElement('td');
+    let carbohydrates = document.createElement('td');
+    let protein = document.createElement('td');
+    let fat = document.createElement('td');
+    let calories = document.createElement('td');
+
+    tr.setAttribute('data-id', doc.id);
+    food.textContent = doc.data().food;
+    measure.textContent = doc.data().measure;
+    carbohydrates.textContent = '-';
+    protein.textContent = '-';
+    fat.textContent = '-';
+    calories.textContent = doc.data().ediblePortion * 4;
+
+    tr.append(food);
+    tr.append(measure);
+    tr.append(carbohydrates);
+    tr.append(protein);
+    tr.append(fat);
+    tr.append(calories);
+    foodlist.appendChild(tr);
+  }
+</script>
+
+</html>
