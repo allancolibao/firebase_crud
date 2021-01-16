@@ -45,7 +45,7 @@
     <div class="row">
       <table id="food-list" class="table nowrap table-sm">
         <tr>
-          <th colspan="2">FOOD</th>
+          <th colspan="3">FOOD</th>
           <th>MEASURE/S</th>
           <th>CARBOHYDRATES (grams)</th>
           <th>PROTEIN (grams)</th>
@@ -58,6 +58,8 @@
   <script src="https://www.gstatic.com/firebasejs/8.2.1/firebase-app.js"></script>
   <script src="https://www.gstatic.com/firebasejs/8.2.1/firebase-auth.js"></script>
   <script src="https://www.gstatic.com/firebasejs/8.2.1/firebase-firestore.js"></script>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+
 </body>
 
 <script id="MainScript">
@@ -79,7 +81,7 @@
   db = firebase.firestore();
   var collection = db.collection("foodlist")
 
-  var carbohydrates, protein, fat;
+  var carbohydrates, protein, fat, carVegetableArow2, proteinVegetableArow2, proteinMilkWhole, fatMilkWhole, carMilkWhole, carRice, proteinRice, carVegetableB, proteinVegetableB, proteinMilkSkimmed, fatMilkSkimmed, carMilkSkimmed, carMilkLowFat, proteinMilkLowFat, fatMilkLowFat, proteinLowFat, proteinMediumFat, proteinHighFat, carSugar, carVegetableA, carVegetableB, carFruit, fatFat, fatLowFatMeat, fatMediumFatMeat, fatHighFatMeat;
 
   function computeBMI() {
     var height = document.getElementById('height').value;
@@ -156,51 +158,51 @@
 
 
     //Carbohydrates Result
-    var carVegetableA = carbohydrates * 0.15;
-    var carVegetableB = carbohydrates * 0.15;
-    var carFruit = carbohydrates * 0.10;
+    carVegetableA = carbohydrates * 0.15;
+    carVegetableB = carbohydrates * 0.15;
+    carFruit = carbohydrates * 0.10;
 
     //Carbohyrdrates for Milk List
-    var carMilkWhole = (carbohydrates * 0.05) / 3;
-    var carMilkLowFat = (carbohydrates * 0.05) / 3;
-    var carMilkSkimmed = (carbohydrates * 0.05) / 3;
+    carMilkWhole = (carbohydrates * 0.05) / 3;
+    carMilkLowFat = (carbohydrates * 0.05) / 3;
+    carMilkSkimmed = (carbohydrates * 0.05) / 3;
 
     //Carbohydrates for Vegetable A row 2
-    var carVegetableArow2 = carbohydrates * 0.15
+    carVegetableArow2 = carbohydrates * 0.15
 
     //Carbohydrates for Vegetable B
-    var carVegetableB = carbohydrates * 0.15
+    carVegetableB = carbohydrates * 0.15
 
-    var carRice = carbohydrates * 0.50;
-    var carSugar = carbohydrates * 0.05;
+    carRice = carbohydrates * 0.50;
+    carSugar = carbohydrates * 0.05;
 
     //Protein Result for Vegetable A row 2
-    var proteinVegetableArow2 = proteins * 0.05;
+    proteinVegetableArow2 = proteins * 0.05;
 
     //Protein Result for Vegetable B
-    var proteinVegetableB = proteins * 0.05;
+    proteinVegetableB = proteins * 0.05;
 
     //Protein Result for Meat
-    var proteinLowFat = (proteins * 0.8) / 3;
-    var proteinMediumFat = (proteins * 0.8) / 3;
-    var proteinHighFat = (proteins * 0.8) / 3;
-    var proteinRice = proteins * 0.1;
+    proteinLowFat = (proteins * 0.8) / 3;
+    proteinMediumFat = (proteins * 0.8) / 3;
+    proteinHighFat = (proteins * 0.8) / 3;
+    proteinRice = proteins * 0.1;
 
     // Protein Result for Milk
-    var proteinMilkWhole = (proteins * 0.25) / 3;
-    var proteinMilkLowFat = (proteins * 0.25) / 3;
-    var proteinMilkSkimmed = (proteins * 0.25) / 3;
+    proteinMilkWhole = (proteins * 0.25) / 3;
+    proteinMilkLowFat = (proteins * 0.25) / 3;
+    proteinMilkSkimmed = (proteins * 0.25) / 3;
 
     //Fat Result for Fat
-    var fatFat = fats * 0.50;
-    var fatLowFatMeat = (fats * 0.25) / 3;
-    var fatMediumFatMeat = (fats * 0.25) / 3;
-    var fatHighFatMeat = (fats * 0.25) / 3;
+    fatFat = fats * 0.50;
+    fatLowFatMeat = (fats * 0.25) / 3;
+    fatMediumFatMeat = (fats * 0.25) / 3;
+    fatHighFatMeat = (fats * 0.25) / 3;
 
-    //Fat Result for Milk
-    var fatMilkWhole = (fats * 0.25) / 3;
-    var fatMilkLowFat = (fats * 0.25) / 3;
-    var fatMilkSkimmed = (fats * 0.25) / 3;
+    //Fat Result fo Milk
+    fatMilkWhole = (fats * 0.25) / 3;
+    fatMilkLowFat = (fats * 0.25) / 3;
+    fatMilkSkimmed = (fats * 0.25) / 3;
 
     console.log('carbohydrates :' + carbohydrates + ' protein :' + proteins + ' fat :' + fats);
     document.getElementById('carbohydrates').innerHTML = carbohydrates.toFixed(2);
@@ -212,9 +214,6 @@
     for (var i = table.rows.length - 1; i > 0; i--) {
       table.deleteRow(i);
     }
-
-
-
 
     collection
       .where('name', '==', 'Vegetable')
@@ -266,8 +265,8 @@
 
     collection
       .where('name', '==', 'Fruit')
-      // .where('ediblePortion', '<=', carFruit + 5)
-      // .where('ediblePortion', '>=', (carFruit - 5))
+      .where('ediblePortion', '<=', carFruit + 5)
+      .where('ediblePortion', '>=', (carFruit - 5))
       .get()
       .then(function (querySnapshot) {
         var fruitarray = []
@@ -284,8 +283,8 @@
     collection
       .where('name', '==', 'Milk')
       .where('nameCategory', '==', 'Whole milk')
-      // .where('ediblePortion', '<=', carMilkWhole + 50)
-      // .where('ediblePortion', '>=', (carMilkWhole - 50))
+      .where('ediblePortion', '<=', carMilkWhole + 50)
+      .where('ediblePortion', '>=', (carMilkWhole - 50))
       .get()
       .then(function (querySnapshot) {
         var wholemilkarray = []
@@ -302,8 +301,8 @@
     collection
       .where('name', '==', 'Milk')
       .where('nameCategory', '==', 'Skimmed (non-fat)')
-      // .where('ediblePortion', '<=', carMilkSkimmed + 5)
-      // .where('ediblePortion', '>=', (carMilkSkimmed - 5))
+      .where('ediblePortion', '<=', carMilkSkimmed + 5)
+      .where('ediblePortion', '>=', (carMilkSkimmed - 5))
       .get()
       .then(function (querySnapshot) {
         var skimmedmilkarray = []
@@ -320,8 +319,8 @@
     collection
       .where('name', '==', 'Milk')
       .where('nameCategory', '==', 'Low fat Milk')
-      // .where('ediblePortion', '<=', carMilkLowFat + 5)
-      // .where('ediblePortion', '>=', (carMilkLowFat - 5))
+      .where('ediblePortion', '<=', carMilkLowFat + 5)
+      .where('ediblePortion', '>=', (carMilkLowFat - 5))
       .get().then((snapshot) => {
         var lowfatmilkarray = []
         snapshot.docs.forEach(doc => {
@@ -336,8 +335,8 @@
 
     collection
       .where('name', '==', 'Rice')
-      // .where('ediblePortion', '<=', carRice + 5)
-      // .where('ediblePortion', '>=', (carRice - 5))
+      .where('ediblePortion', '<=', carRice + 5)
+      .where('ediblePortion', '>=', (carRice - 5))
       .get().then((snapshot) => {
         var ricearray = []
         snapshot.docs.forEach(doc => {
@@ -353,8 +352,8 @@
     collection
       .where('name', '==', 'Meat')
       .where('nameCategory', '==', 'Low Fat')
-      // .where('ediblePortion', '<=', fats + 5)
-      // .where('ediblePortion', '>=', (fats - 5))
+      .where('ediblePortion', '<=', fats + 5)
+      .where('ediblePortion', '>=', (fats - 5))
       .get().then((snapshot) => {
         var meatlowfatarray = []
         snapshot.docs.forEach(doc => {
@@ -370,8 +369,8 @@
     collection
       .where('name', '==', 'Meat')
       .where('nameCategory', '==', 'Medium Fat')
-      // .where('ediblePortion', '<=', fats + 5)
-      // .where('ediblePortion', '>=', (fats - 5))
+      .where('ediblePortion', '<=', fats + 5)
+      .where('ediblePortion', '>=', (fats - 5))
       .get().then((snapshot) => {
         var meatmediumfat = []
         snapshot.docs.forEach(doc => {
@@ -387,8 +386,8 @@
     collection
       .where('name', '==', 'Meat')
       .where('nameCategory', '==', 'High Fat')
-      // .where('ediblePortion', '<=', fats + 5)
-      // .where('ediblePortion', '>=', (fats - 5))
+      .where('ediblePortion', '<=', fats + 5)
+      .where('ediblePortion', '>=', (fats - 5))
       .get().then((snapshot) => {
         var meathighfatarray = []
         snapshot.docs.forEach(doc => {
@@ -403,8 +402,8 @@
 
     collection
       .where('name', '==', 'Fat')
-      // .where('ediblePortion', '<=', fatFat + 5)
-      // .where('ediblePortion', '>=', (fatFat - 5))
+      .where('ediblePortion', '<=', fatFat + 5)
+      .where('ediblePortion', '>=', (fatFat - 5))
       .get().then((snapshot) => {
         var fatarray = []
         snapshot.docs.forEach(doc => {
@@ -439,7 +438,7 @@
   const foodlist = document.querySelector("#food-list");
   var table = document.getElementById("food-list");
 
-  function veg1() {
+  function vegA1() {
     collection
       .where('name', '==', 'Vegetable')
       .where('nameCategory', '==', 'Group A')
@@ -450,20 +449,256 @@
           vegetableArow1Array.push(doc.data());
         });
         let randomVegetableA1 = Math.floor(Math.random() * vegetableArow1Array.length);
+        $('#food-list tr[data-id="' + 1 + '"]').remove();
         renderVegetableArow1(vegetableArow1Array[randomVegetableA1]);
-        foodlist.deleteRow(1);
       })
       .catch(function (error) {
         console.error("Error getting documents: ", error);
       });
   }
 
+  function vegA2() {
+    collection
+      .where('name', '==', 'Vegetable')
+      .where('nameCategory', '==', 'Group A')
+      .get()
+      .then(function (querySnapshot) {
+        var vegetableArow2Array = []
+        querySnapshot.forEach(function (doc) {
+          vegetableArow2Array.push(doc.data());
+        });
+        let randomVegetableA2 = Math.floor(Math.random() * vegetableArow2Array.length);
+        $('#food-list tr[data-id="' + 2 + '"]').remove();
+        renderVegetableArow2(vegetableArow2Array[randomVegetableA2], carVegetableArow2, proteinVegetableArow2);
+      })
+      .catch(function (error) {
+        console.error("Error getting documents: ", error);
+      });
+  }
+
+  function vegB() {
+    collection
+      .where('name', '==', 'Vegetable')
+      .where('nameCategory', '==', 'Group B')
+      .get()
+      .then(function (querySnapshot) {
+        var vegetableBArray = []
+        querySnapshot.forEach(function (doc) {
+          vegetableBArray.push(doc.data());
+        });
+        let randomVegetableB = Math.floor(Math.random() * vegetableBArray.length);
+        $('#food-list tr[data-id="' + 3 + '"]').remove();
+        renderVegetableB(vegetableBArray[randomVegetableB], carVegetableB, proteinVegetableB);
+      })
+      .catch(function (error) {
+        console.error("Error getting documents: ", error);
+      });
+  }
+
+  function fruit() {
+    collection
+      .where('name', '==', 'Fruit')
+      .where('ediblePortion', '<=', carFruit + 5)
+      .where('ediblePortion', '>=', (carFruit - 5))
+      .get()
+      .then(function (querySnapshot) {
+        var fruitarray = []
+        querySnapshot.forEach(function (doc) {
+          fruitarray.push(doc.data());
+        });
+        let randomfruit = Math.floor(Math.random() * fruitarray.length);
+        $('#food-list tr[data-id="' + 4 + '"]').remove();
+        renderFruit(fruitarray[randomfruit]);
+      })
+      .catch(function (error) {
+        console.error("Error getting documents: ", error);
+      });
+  }
+
+  function wholeMilk() {
+    collection
+      .where('name', '==', 'Milk')
+      .where('nameCategory', '==', 'Whole milk')
+      .where('ediblePortion', '<=', carMilkWhole + 50)
+      .where('ediblePortion', '>=', (carMilkWhole - 50))
+      .get()
+      .then(function (querySnapshot) {
+        var wholemilkarray = []
+        querySnapshot.forEach(function (doc) {
+          wholemilkarray.push(doc.data());
+        });
+        let randomwholemilk = Math.floor(Math.random() * wholemilkarray.length);
+        $('#food-list tr[data-id="' + 5 + '"]').remove();
+        renderWholeMilk(wholemilkarray[randomwholemilk], proteinMilkWhole, fatMilkWhole);
+      })
+      .catch(function (error) {
+        console.error("Error getting documents: ", error);
+      });
+  }
+
+  function skimmedMilk() {
+    collection
+      .where('name', '==', 'Milk')
+      .where('nameCategory', '==', 'Skimmed (non-fat)')
+      .where('ediblePortion', '<=', carMilkSkimmed + 5)
+      .where('ediblePortion', '>=', (carMilkSkimmed - 5))
+      .get()
+      .then(function (querySnapshot) {
+        var skimmedmilkarray = []
+        querySnapshot.forEach(function (doc) {
+          skimmedmilkarray.push(doc.data());
+        });
+        let randomskimmedmilk = Math.floor(Math.random() * skimmedmilkarray.length);
+        $('#food-list tr[data-id="' + 6 + '"]').remove();
+        renderSkimmedMilk(skimmedmilkarray[randomskimmedmilk], proteinMilkSkimmed, fatMilkSkimmed);
+      })
+      .catch(function (error) {
+        console.error("Error getting documents: ", error);
+      });
+  }
+
+  function lowFat() {
+    collection
+      .where('name', '==', 'Milk')
+      .where('nameCategory', '==', 'Low fat Milk')
+      .where('ediblePortion', '<=', carMilkLowFat + 5)
+      .where('ediblePortion', '>=', (carMilkLowFat - 5))
+      .get().then((snapshot) => {
+        var lowfatmilkarray = []
+        snapshot.docs.forEach(doc => {
+          lowfatmilkarray.push(doc.data());
+        });
+        let randomlowfatmilk = Math.floor(Math.random() * lowfatmilkarray.length);
+        $('#food-list tr[data-id="' + 7 + '"]').remove();
+        renderLowFat(lowfatmilkarray[randomlowfatmilk], proteinMilkLowFat, fatMilkLowFat);
+      })
+      .catch(function (error) {
+        console.error("Error getting documents: ", error);
+      });
+  }
+
+  function rice() {
+    collection
+      .where('name', '==', 'Rice')
+      .where('ediblePortion', '<=', carRice + 5)
+      .where('ediblePortion', '>=', (carRice - 5))
+      .get().then((snapshot) => {
+        var ricearray = []
+        snapshot.docs.forEach(doc => {
+          ricearray.push(doc.data());
+        });
+        let randomrice = Math.floor(Math.random() * ricearray.length);
+        $('#food-list tr[data-id="' + 8 + '"]').remove();
+        renderRice(ricearray[randomrice], proteinRice);
+      })
+      .catch(function (error) {
+        console.error("Error getting documents: ", error);
+      });
+  }
+
+  function meatLowFat() {
+    collection
+      .where('name', '==', 'Meat')
+      .where('nameCategory', '==', 'Low Fat')
+      .where('ediblePortion', '<=', fats + 5)
+      .where('ediblePortion', '>=', (fats - 5))
+      .get().then((snapshot) => {
+        var meatlowfatarray = []
+        snapshot.docs.forEach(doc => {
+          meatlowfatarray.push(doc.data());
+        });
+        let randomlowfat = Math.floor(Math.random() * meatlowfatarray.length);
+        $('#food-list tr[data-id="' + 9 + '"]').remove();
+        renderMeatLowFat(meatlowfatarray[randomlowfat], proteinLowFat);
+      })
+      .catch(function (error) {
+        console.error("Error getting documents: ", error);
+      });
+  }
+
+  function meatMediumFat() {
+    collection
+      .where('name', '==', 'Meat')
+      .where('nameCategory', '==', 'Medium Fat')
+      .where('ediblePortion', '<=', fats + 5)
+      .where('ediblePortion', '>=', (fats - 5))
+      .get().then((snapshot) => {
+        var meatmediumfat = []
+        snapshot.docs.forEach(doc => {
+          meatmediumfat.push(doc.data());
+        });
+        let randommediumfat = Math.floor(Math.random() * meatmediumfat.length);
+        $('#food-list tr[data-id="' + 10 + '"]').remove();
+        renderMeatMediumFat(meatmediumfat[randommediumfat], proteinMediumFat);
+      })
+      .catch(function (error) {
+        console.error("Error getting documents: ", error);
+      });
+  }
+
+  function meatHighFat() {
+    collection
+      .where('name', '==', 'Meat')
+      .where('nameCategory', '==', 'High Fat')
+      .where('ediblePortion', '<=', fats + 5)
+      .where('ediblePortion', '>=', (fats - 5))
+      .get().then((snapshot) => {
+        var meathighfatarray = []
+        snapshot.docs.forEach(doc => {
+          meathighfatarray.push(doc.data());
+        });
+        let randommediumhighfat = Math.floor(Math.random() * meathighfatarray.length);
+        $('#food-list tr[data-id="' + 11 + '"]').remove();
+        renderMeatHighFat(meathighfatarray[randommediumhighfat], proteinHighFat);
+      })
+      .catch(function (error) {
+        console.error("Error getting documents: ", error);
+      });
+  }
+
+  function fatList() {
+    collection
+      .where('name', '==', 'Fat')
+      .where('ediblePortion', '<=', fatFat + 5)
+      .where('ediblePortion', '>=', (fatFat - 5))
+      .get().then((snapshot) => {
+        var fatarray = []
+        snapshot.docs.forEach(doc => {
+          fatarray.push(doc.data())
+        });
+        let randomfat = Math.floor(Math.random() * fatarray.length);
+        $('#food-list tr[data-id="' + 12 + '"]').remove();
+        renderFatList(fatarray[randomfat]);
+      })
+      .catch(function (error) {
+        console.error("Error getting documents: ", error);
+      });
+  }
+
+  function sugar() {
+    collection
+      .where('name', '==', 'Sugar')
+      .where('ediblePortion', '<=', carSugar + 5)
+      .where('ediblePortion', '>=', (carSugar - 5))
+      .get().then((snapshot) => {
+        var sugararray = []
+        snapshot.docs.forEach(doc => {
+          sugararray.push(doc.data());
+        });
+        let randomsugar = Math.floor(Math.random() * sugararray.length);
+        $('#food-list tr[data-id="' + 13 + '"]').remove();
+        renderSugar(sugararray[randomsugar]);
+      })
+      .catch(function (error) {
+        console.error("Error getting documents: ", error);
+      });
+  }
   function renderVegetableArow1(doc) {
 
     let button = document.createElement('BUTTON');
     let onclick = button.getAttribute("onclick");
-    button.setAttribute("id", "veg1");
-    button.setAttribute("onclick", "veg1();");
+    button.setAttribute("id", "vegA1");
+    button.setAttribute("onclick", "vegA1();");
     button.innerHTML = "Change";
     button.style.textAlign = "center";
     button.className = "btn btn-sm btn-primary btn-block";
@@ -477,7 +712,7 @@
     let fat = document.createElement('td');
     let calories = document.createElement('td');
 
-    tr.setAttribute('id', doc.foodexcode);
+    tr.setAttribute('data-id', 1);
     namecategory.textContent = 'Vegetable A';
     food.textContent = doc.food;
     measure.textContent = doc.measure;
@@ -498,6 +733,14 @@
   }
 
   function renderVegetableArow2(doc, carVegetableArow2, proteinVegetableArow2) {
+    let button = document.createElement('BUTTON');
+    let onclick = button.getAttribute("onclick");
+    button.setAttribute("id", "vegA2");
+    button.setAttribute("onclick", "vegA2();");
+    button.innerHTML = "Change";
+    button.style.textAlign = "center";
+    button.className = "btn btn-sm btn-primary btn-block";
+
     let tr = document.createElement('tr');
     let namecategory = document.createElement('td');
     let food = document.createElement('td');
@@ -507,7 +750,7 @@
     let fat = document.createElement('td');
     let calories = document.createElement('td');
 
-    tr.setAttribute('data-id', doc.foodexcode);
+    tr.setAttribute('data-id', 2);
     namecategory.textContent = 'Vegetable A';
     food.textContent = doc.food;
     measure.textContent = doc.measure;
@@ -516,6 +759,7 @@
     fat.textContent = '-';
     calories.textContent = '-';
 
+    tr.append(button);
     tr.append(namecategory);
     tr.append(food);
     tr.append(measure);
@@ -527,6 +771,14 @@
   }
 
   function renderVegetableB(doc, carVegetableB, proteinVegetableB) {
+    let button = document.createElement('BUTTON');
+    let onclick = button.getAttribute("onclick");
+    button.setAttribute("id", "vegB");
+    button.setAttribute("onclick", "vegB();");
+    button.innerHTML = "Change";
+    button.style.textAlign = "center";
+    button.className = "btn btn-sm btn-primary btn-block";
+
     let tr = document.createElement('tr');
     let namecategory = document.createElement('td');
     let food = document.createElement('td');
@@ -536,7 +788,7 @@
     let fat = document.createElement('td');
     let calories = document.createElement('td');
 
-    tr.setAttribute('data-id', doc.foodexcode);
+    tr.setAttribute('data-id', 3);
     namecategory.textContent = 'Vegetable B';
     food.textContent = doc.food;
     measure.textContent = doc.measure;
@@ -545,6 +797,8 @@
     fat.textContent = '-';
     calories.textContent = Math.round((Math.round(carVegetableB) * 4) + (Math.round(proteinVegetableB) * 4));
 
+
+    tr.append(button);
     tr.append(namecategory);
     tr.append(food);
     tr.append(measure);
@@ -556,6 +810,14 @@
   }
 
   function renderFruit(doc) {
+    let button = document.createElement('BUTTON');
+    let onclick = button.getAttribute("onclick");
+    button.setAttribute("id", "fruit");
+    button.setAttribute("onclick", "fruit();");
+    button.innerHTML = "Change";
+    button.style.textAlign = "center";
+    button.className = "btn btn-sm btn-primary btn-block";
+
     let tr = document.createElement('tr');
     let namecategory = document.createElement('td');
     let food = document.createElement('td');
@@ -565,7 +827,7 @@
     let fat = document.createElement('td');
     let calories = document.createElement('td');
 
-    tr.setAttribute('data-id', doc.foodexcode);
+    tr.setAttribute('data-id', 4);
     namecategory.textContent = 'Fruit';
     food.textContent = doc.food;
     measure.textContent = doc.measure;
@@ -574,6 +836,7 @@
     fat.textContent = '-';
     calories.textContent = doc.ediblePortion * 4;
 
+    tr.append(button);
     tr.append(namecategory);
     tr.append(food);
     tr.append(measure);
@@ -585,6 +848,14 @@
   }
 
   function renderWholeMilk(doc, proteinMilkWhole, fatMilkWhole) {
+    let button = document.createElement('BUTTON');
+    let onclick = button.getAttribute("onclick");
+    button.setAttribute("id", "wholeMilk");
+    button.setAttribute("onclick", "wholeMilk();");
+    button.innerHTML = "Change";
+    button.style.textAlign = "center";
+    button.className = "btn btn-sm btn-primary btn-block";
+
     let tr = document.createElement('tr');
     let namecategory = document.createElement('td');
     let food = document.createElement('td');
@@ -594,7 +865,7 @@
     let fat = document.createElement('td');
     let calories = document.createElement('td');
 
-    tr.setAttribute('data-id', doc.foodexcode);
+    tr.setAttribute('data-id', 5);
     namecategory.textContent = 'Whole Milk';
     food.textContent = doc.food;
     measure.textContent = doc.measure;
@@ -603,6 +874,8 @@
     fat.textContent = Math.round(fatMilkWhole);
     calories.textContent = doc.ediblePortion * 4;
 
+
+    tr.append(button);
     tr.append(namecategory);
     tr.append(food);
     tr.append(measure);
@@ -614,6 +887,14 @@
   }
 
   function renderSkimmedMilk(doc, proteinMilkSkimmed, fatMilkSkimmed) {
+    let button = document.createElement('BUTTON');
+    let onclick = button.getAttribute("onclick");
+    button.setAttribute("id", "skimmedMilk");
+    button.setAttribute("onclick", "skimmedMilk();");
+    button.innerHTML = "Change";
+    button.style.textAlign = "center";
+    button.className = "btn btn-sm btn-primary btn-block";
+
     let tr = document.createElement('tr');
     let namecategory = document.createElement('td');
     let food = document.createElement('td');
@@ -623,7 +904,7 @@
     let fat = document.createElement('td');
     let calories = document.createElement('td');
 
-    tr.setAttribute('data-id', doc.foodexcode);
+    tr.setAttribute('data-id', 6);
     namecategory.textContent = 'Skimmed Milk';
     food.textContent = doc.food;
     measure.textContent = doc.measure;
@@ -632,6 +913,8 @@
     fat.textContent = Math.round(fatMilkSkimmed);
     calories.textContent = doc.ediblePortion * 4;
 
+
+    tr.append(button);
     tr.append(namecategory);
     tr.append(food);
     tr.append(measure);
@@ -643,6 +926,14 @@
   }
 
   function renderLowFat(doc, proteinMilkLowFat, fatMilkLowFat) {
+    let button = document.createElement('BUTTON');
+    let onclick = button.getAttribute("onclick");
+    button.setAttribute("id", "lowFat");
+    button.setAttribute("onclick", "lowFat();");
+    button.innerHTML = "Change";
+    button.style.textAlign = "center";
+    button.className = "btn btn-sm btn-primary btn-block";
+
     let tr = document.createElement('tr');
     let namecategory = document.createElement('td');
     let food = document.createElement('td');
@@ -652,7 +943,7 @@
     let fat = document.createElement('td');
     let calories = document.createElement('td');
 
-    tr.setAttribute('data-id', doc.foodexcode);
+    tr.setAttribute('data-id', 7);
     namecategory.textContent = 'Low Fat';
     food.textContent = doc.food;
     measure.textContent = doc.measure;
@@ -661,6 +952,7 @@
     fat.textContent = Math.round(fatMilkLowFat);
     calories.textContent = doc.ediblePortion * 4;
 
+    tr.append(button);
     tr.append(namecategory);
     tr.append(food);
     tr.append(measure);
@@ -672,6 +964,14 @@
   }
 
   function renderRice(doc, proteinRice) {
+    let button = document.createElement('BUTTON');
+    let onclick = button.getAttribute("onclick");
+    button.setAttribute("id", "rice");
+    button.setAttribute("onclick", "rice();");
+    button.innerHTML = "Change";
+    button.style.textAlign = "center";
+    button.className = "btn btn-sm btn-primary btn-block";
+
     let tr = document.createElement('tr');
     let namecategory = document.createElement('td');
     let food = document.createElement('td');
@@ -681,7 +981,7 @@
     let fat = document.createElement('td');
     let calories = document.createElement('td');
 
-    tr.setAttribute('data-id', doc.foodexcode);
+    tr.setAttribute('data-id', 8);
     namecategory.textContent = 'Rice';
     food.textContent = doc.food;
     measure.textContent = doc.measure;
@@ -690,6 +990,7 @@
     fat.textContent = '-';
     calories.textContent = doc.ediblePortion * 4;
 
+    tr.append(button);
     tr.append(namecategory);
     tr.append(food);
     tr.append(measure);
@@ -701,6 +1002,14 @@
   }
 
   function renderMeatLowFat(doc, proteinLowFat) {
+    let button = document.createElement('BUTTON');
+    let onclick = button.getAttribute("onclick");
+    button.setAttribute("id", "meatLowFat");
+    button.setAttribute("onclick", "meatLowFat();");
+    button.innerHTML = "Change";
+    button.style.textAlign = "center";
+    button.className = "btn btn-sm btn-primary btn-block";
+
     let tr = document.createElement('tr');
     let namecategory = document.createElement('td');
     let food = document.createElement('td');
@@ -710,7 +1019,7 @@
     let fat = document.createElement('td');
     let calories = document.createElement('td');
 
-    tr.setAttribute('data-id', doc.foodexcode);
+    tr.setAttribute('data-id', 9);
     namecategory.textContent = 'Low Fat Meat';
     food.textContent = doc.food;
     measure.textContent = doc.measure;
@@ -719,6 +1028,7 @@
     fat.textContent = Math.round((doc.ediblePortion * 0.25) / 3);
     calories.textContent = 41;
 
+    tr.append(button);
     tr.append(namecategory);
     tr.append(food);
     tr.append(measure);
@@ -730,6 +1040,14 @@
   }
 
   function renderMeatMediumFat(doc, proteinMediumFat) {
+    let button = document.createElement('BUTTON');
+    let onclick = button.getAttribute("onclick");
+    button.setAttribute("id", "meatMediumFat");
+    button.setAttribute("onclick", "meatMediumFat();");
+    button.innerHTML = "Change";
+    button.style.textAlign = "center";
+    button.className = "btn btn-sm btn-primary btn-block";
+
     let tr = document.createElement('tr');
     let namecategory = document.createElement('td');
     let food = document.createElement('td');
@@ -739,7 +1057,7 @@
     let fat = document.createElement('td');
     let calories = document.createElement('td');
 
-    tr.setAttribute('data-id', doc.foodexcode);
+    tr.setAttribute('data-id', 10);
     namecategory.textContent = 'Medium Fat Meat';
     food.textContent = doc.food;
     measure.textContent = doc.measure;
@@ -748,6 +1066,7 @@
     fat.textContent = Math.round((doc.ediblePortion * 0.25) / 3);;
     calories.textContent = 86;
 
+    tr.append(button);
     tr.append(namecategory);
     tr.append(food);
     tr.append(measure);
@@ -759,6 +1078,14 @@
   }
 
   function renderMeatHighFat(doc, proteinHighFat) {
+    let button = document.createElement('BUTTON');
+    let onclick = button.getAttribute("onclick");
+    button.setAttribute("id", "meatHighFat");
+    button.setAttribute("onclick", "meatHighFat();");
+    button.innerHTML = "Change";
+    button.style.textAlign = "center";
+    button.className = "btn btn-sm btn-primary btn-block";
+
     let tr = document.createElement('tr');
     let namecategory = document.createElement('td');
     let food = document.createElement('td');
@@ -768,7 +1095,7 @@
     let fat = document.createElement('td');
     let calories = document.createElement('td');
 
-    tr.setAttribute('data-id', doc.foodexcode);
+    tr.setAttribute('data-id', 11);
     namecategory.textContent = 'High Fat Meat';
     food.textContent = doc.food;
     measure.textContent = doc.measure;
@@ -777,6 +1104,7 @@
     fat.textContent = Math.round((doc.ediblePortion * 0.25) / 3);;
     calories.textContent = 122;
 
+    tr.append(button);
     tr.append(namecategory);
     tr.append(food);
     tr.append(measure);
@@ -788,6 +1116,14 @@
   }
 
   function renderFatList(doc) {
+    let button = document.createElement('BUTTON');
+    let onclick = button.getAttribute("onclick");
+    button.setAttribute("id", "fatList");
+    button.setAttribute("onclick", "fatList();");
+    button.innerHTML = "Change";
+    button.style.textAlign = "center";
+    button.className = "btn btn-sm btn-primary btn-block";
+
     let tr = document.createElement('tr');
     let namecategory = document.createElement('td');
     let food = document.createElement('td');
@@ -797,7 +1133,7 @@
     let fat = document.createElement('td');
     let calories = document.createElement('td');
 
-    tr.setAttribute('data-id', doc.foodexcode);
+    tr.setAttribute('data-id', 12);
     namecategory.textContent = 'Fat';
     food.textContent = doc.food;
     measure.textContent = doc.measure;
@@ -806,6 +1142,7 @@
     fat.textContent = doc.ediblePortion;
     calories.textContent = doc.ediblePortion * 9;
 
+    tr.append(button);
     tr.append(namecategory);
     tr.append(food);
     tr.append(measure);
@@ -817,6 +1154,14 @@
   }
 
   function renderSugar(doc) {
+    let button = document.createElement('BUTTON');
+    let onclick = button.getAttribute("onclick");
+    button.setAttribute("id", "sugar");
+    button.setAttribute("onclick", "sugar();");
+    button.innerHTML = "Change";
+    button.style.textAlign = "center";
+    button.className = "btn btn-sm btn-primary btn-block";
+
     let tr = document.createElement('tr');
     let namecategory = document.createElement('td');
     let food = document.createElement('td');
@@ -826,7 +1171,7 @@
     let fat = document.createElement('td');
     let calories = document.createElement('td');
 
-    tr.setAttribute('data-id', doc.foodexcode);
+    tr.setAttribute('data-id', 13);
     namecategory.textContent = 'Sugar';
     food.textContent = doc.food;
     measure.textContent = doc.measure;
@@ -835,6 +1180,7 @@
     fat.textContent = '-';
     calories.textContent = doc.ediblePortion * 4;
 
+    tr.append(button);
     tr.append(namecategory);
     tr.append(food);
     tr.append(measure);
