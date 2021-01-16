@@ -1,0 +1,251 @@
+<html>
+
+<head>
+    <title>FIREBASE CLOUD FIRESTORE</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css">
+</head>
+
+<body>
+    <div class="container">
+        <br>
+        <div class="row">
+            <div class="col">
+                Age <input id="age" type="number" class="form-control" placeholder="years" required></input><br><br>
+            </div>
+            <div class="col">
+                Height <input id="height" type="number" class="form-control" placeholder="cm" required></input><br><br>
+            </div>
+            <div class="col">
+                Weight <input id="weight" type="number" class="form-control" placeholder="kg" required></input><br><br>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col">
+                <button onclick="computeBMI()" id="computeBMI"
+                    class="btn btn-lg btn-primary btn-block text-uppercase">Compute
+                    BMI</button>
+            </div>
+        </div>
+        <br>
+        <div class="row">
+            <div class="col">
+                Your BMI : <span id="measure"></span><br>
+                Ideal Weight : <span id="idealWeight"></span><br>
+                Calories : <span id="calories"></span><br>
+                <hr>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col">
+                Carbohydrate : <span id="carbohydrates"></span><br>
+                Protein : <span id="protein"></span><br>
+                Fat : <span id="fat"></span><br>
+            </div>
+        </div>
+        <br>
+        <div class="row">
+            <table id="food-list" class="table nowrap table-sm">
+                <tr>
+                    <th colspan="2">FOOD</th>
+                    <th>MEASURE/S</th>
+                    <th>CARBOHYDRATES (grams)</th>
+                    <th>PROTEIN (grams)</th>
+                    <th>FAT (grams)</th>
+                    <th>ENERGY (calories)</th>
+                </tr>
+            </table>
+        </div>
+    </div>
+</body>
+
+<script id="MainScript">
+    var carbohydrates, protein, fat;
+
+    function computeBMI() {
+        var height = document.getElementById('height').value;
+        var years = document.getElementById('age').value;
+        var kg = document.getElementById('weight').value;
+        var heightToCm = document.getElementById('height').value / 100;
+        var m2 = heightToCm * heightToCm;
+        var bmi = kg / m2; //result of bmi
+        // console.log('kg ' + kg + ' m2 ' + m2);
+
+        //Tanhauser's Formula for Desirable Body Weight
+        var heightInCm = parseInt(document.getElementById('height').value) - 100; //(height in cm - 100)
+        var heightInCmKg = heightInCm * 0.10; //(height in cm - 100) * 10%
+        var dbw = heightInCm - heightInCmKg;
+        document.getElementById('idealWeight').innerHTML = dbw.toFixed(2);
+        // console.log(heightInCm + ' ' + heightInCmKg + ' ' + dbw);
+
+        switch (true) {
+            case bmi < 16:
+                var kcal = newdbw * 35;
+                console.log('Very Severly Underweight, ' + 'new dbw ' + newdbw + ' ' + ' kcal ' + kcal);
+                document.getElementById('measure').innerHTML = bmi.toFixed(1);
+                document.getElementById('calories').innerHTML = kcal.toFixed(2);
+                break;
+
+            case bmi == 16 || bmi <= 17:
+                var newdbw = dbw * 0.10;
+                var kcal = newdbw * 35;
+                console.log('Severly Underweight, ' + 'new dbw ' + newdbw + ' ' + ' kcal ' + kcal);
+                document.getElementById('measure').innerHTML = bmi.toFixed(1);
+                document.getElementById('calories').innerHTML = kcal.toFixed(2);
+                break;
+
+            case bmi <= 17 || bmi <= 18.5:
+                var newdbw = dbw * 0.10;
+                var kcal = newdbw * 35;
+                console.log('Underweight, ' + 'new dbw ' + newdbw + ' ' + ' kcal ' + kcal);
+                document.getElementById('measure').innerHTML = bmi.toFixed(1);
+                document.getElementById('calories').innerHTML = kcal.toFixed(2);
+                break;
+
+            case bmi <= 18.5 || bmi <= 24.9:
+                var newdbw = dbw; //as is dbw
+                var kcal = newdbw * 30;
+                console.log('Normal, ' + 'new dbw ' + newdbw + ' ' + ' kcal ' + kcal);
+                document.getElementById('measure').innerHTML = bmi.toFixed(1);
+                document.getElementById('calories').innerHTML = kcal.toFixed(2);
+                break;
+
+            case bmi <= 25 || bmi <= 29.9:
+                var newdbw = dbw + ((dbw * 0.10) * -1);
+                var kcal = newdbw * 25;
+                console.log('Overweight, ' + 'new dbw ' + newdbw + ' ' + ' kcal ' + kcal);
+                document.getElementById('measure').innerHTML = bmi.toFixed(1);
+                document.getElementById('calories').innerHTML = kcal.toFixed(2);
+                break;
+
+            case bmi > 30:
+                var newdbw = dbw + ((dbw * 0.10) * -1);
+                var kcal = newdbw * 25;
+                console.log('Obesity, ' + 'new dbw ' + newdbw + ' ' + ' kcal ' + kcal);
+                document.getElementById('measure').innerHTML = bmi.toFixed(1);
+                document.getElementById('calories').innerHTML = kcal.toFixed(2);
+                break;
+
+            default:
+                text = "can't compute";
+
+        }
+
+        carbohydrates = (kcal * 0.6) / 4;
+        proteins = (kcal * 0.15) / 4;
+        fats = (kcal * 0.25) / 9;
+
+
+        //Carbohydrates Result
+        var carVegetableA = carbohydrates * 0.15;
+        var carVegetableB = carbohydrates * 0.15;
+        var carFruit = carbohydrates * 0.10;
+
+        //Carbohyrdrates for Milk List
+        var carMilkWhole = (carbohydrates * 0.05) / 3;
+        var carMilkLowFat = (carbohydrates * 0.05) / 3;
+        var carMilkSkimmed = (carbohydrates * 0.05) / 3;
+
+        //Carbohydrates for Vegetable A row 2
+        var carVegetableArow2 = carbohydrates * 0.15
+
+        //Carbohydrates for Vegetable B
+        var carVegetableB = carbohydrates * 0.15
+
+        var carRice = carbohydrates * 0.50;
+        var carSugar = carbohydrates * 0.05;
+
+        //Protein Result for Vegetable A row 2
+        var proteinVegetableArow2 = proteins * 0.05;
+
+        //Protein Result for Vegetable B
+        var proteinVegetableB = proteins * 0.05;
+
+        //Protein Result for Meat
+        var proteinLowFat = (proteins * 0.8) / 3;
+        var proteinMediumFat = (proteins * 0.8) / 3;
+        var proteinHighFat = (proteins * 0.8) / 3;
+        var proteinRice = proteins * 0.1;
+
+        // Protein Result for Milk
+        var proteinMilkWhole = (proteins * 0.25) / 3;
+        var proteinMilkLowFat = (proteins * 0.25) / 3;
+        var proteinMilkSkimmed = (proteins * 0.25) / 3;
+
+        //Fat Result for Fat
+        var fatFat = fats * 0.50;
+        var fatLowFatMeat = (fats * 0.25) / 3;
+        var fatMediumFatMeat = (fats * 0.25) / 3;
+        var fatHighFatMeat = (fats * 0.25) / 3;
+
+        //Fat Result for Milk
+        var fatMilkWhole = (fats * 0.25) / 3;
+        var fatMilkLowFat = (fats * 0.25) / 3;
+        var fatMilkSkimmed = (fats * 0.25) / 3;
+
+        console.log('carbohydrates :' + carbohydrates + ' protein :' + proteins + ' fat :' + fats);
+        document.getElementById('carbohydrates').innerHTML = carbohydrates.toFixed(2);
+        document.getElementById('protein').innerHTML = proteins.toFixed(2);
+        document.getElementById('fat').innerHTML = fats.toFixed(2);
+
+        //remove all row exept header
+        var table = document.getElementById("food-list");
+        for (var i = table.rows.length - 1; i > 0; i--) {
+            table.deleteRow(i);
+        }
+
+        var vegetableArow1Array = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
+        let randomVegetableA1 = Math.floor(Math.random() * vegetableArow1Array.length);
+        renderVegetableArow1(vegetableArow1Array[randomVegetableA1]);
+    }
+
+    const foodlist = document.querySelector("#food-list");
+
+    function chg_veg1() {
+        var vegetableArow1Array = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
+        let randomVegetableA1 = Math.floor(Math.random() * vegetableArow1Array.length);
+        renderVegetableArow1(vegetableArow1Array[randomVegetableA1]);
+        var table = document.getElementById("food-list");
+        table.deleteRow(1);
+    }
+
+    function renderVegetableArow1(doc) {
+
+        let button = document.createElement('BUTTON');
+        let onclick = button.getAttribute("onclick");
+        button.setAttribute("id", "chg_veg1");
+        button.setAttribute("onclick", "chg_veg1();");
+        button.innerHTML = "Change";
+        button.style.textAlign = "center";
+        button.className = "btn btn-sm btn-primary btn-block";
+
+        let tr = document.createElement('tr');
+        let namecategory = document.createElement('td');
+        let food = document.createElement('td');
+        let measure = document.createElement('td');
+        let carbohydrates = document.createElement('td');
+        let protein = document.createElement('td');
+        let fat = document.createElement('td');
+        let calories = document.createElement('td');
+
+        tr.setAttribute('data-id', 1);
+        namecategory.textContent = 'Vegetable A';
+        food.textContent = '-';
+        measure.textContent = '-';
+        carbohydrates.textContent = doc;
+        protein.textContent = '-';
+        fat.textContent = '-';
+        calories.textContent = '-';
+
+        tr.append(button);
+        tr.append(namecategory);
+        tr.append(food);
+        tr.append(measure);
+        tr.append(carbohydrates);
+        tr.append(protein);
+        tr.append(fat);
+        tr.append(calories);
+        foodlist.appendChild(tr);
+    }
+</script>
+
+</html>
