@@ -43,15 +43,18 @@
     </div>
     <br>
     <div class="row">
-      <table id="food-list" class="table nowrap table-sm">
-        <tr>
-          <th colspan="3">FOOD</th>
-          <th>MEASURE/S</th>
-          <th>CARBOHYDRATES (grams)</th>
-          <th>PROTEIN (grams)</th>
-          <th>FAT (grams)</th>
-          <th>ENERGY (calories)</th>
-        </tr>
+      <table id="food-list" class="table table-hover nowrap table-sm">
+        <thead>
+          <tr>
+            <th colspan="2">FOOD</th>
+            <th>MEASURE/S</th>
+            <th>CARBOHYDRATES (grams)</th>
+            <th>PROTEIN (grams)</th>
+            <th>FAT (grams)</th>
+            <th>ENERGY (calories)</th>
+            <th>Action</th>
+          </tr>
+        </thead>
       </table>
     </div>
   </div>
@@ -721,7 +724,6 @@
     fat.textContent = '-';
     calories.textContent = '-';
 
-    tr.append(button);
     tr.append(namecategory);
     tr.append(food);
     tr.append(measure);
@@ -729,6 +731,7 @@
     tr.append(protein);
     tr.append(fat);
     tr.append(calories);
+    tr.append(button);
     foodlist.appendChild(tr);
   }
 
@@ -759,7 +762,6 @@
     fat.textContent = '-';
     calories.textContent = '-';
 
-    tr.append(button);
     tr.append(namecategory);
     tr.append(food);
     tr.append(measure);
@@ -767,6 +769,7 @@
     tr.append(protein);
     tr.append(fat);
     tr.append(calories);
+    tr.append(button);
     foodlist.appendChild(tr);
   }
 
@@ -798,7 +801,6 @@
     calories.textContent = Math.round((Math.round(carVegetableB) * 4) + (Math.round(proteinVegetableB) * 4));
 
 
-    tr.append(button);
     tr.append(namecategory);
     tr.append(food);
     tr.append(measure);
@@ -806,6 +808,7 @@
     tr.append(protein);
     tr.append(fat);
     tr.append(calories);
+    tr.append(button);
     foodlist.appendChild(tr);
   }
 
@@ -836,7 +839,6 @@
     fat.textContent = '-';
     calories.textContent = doc.ediblePortion * 4;
 
-    tr.append(button);
     tr.append(namecategory);
     tr.append(food);
     tr.append(measure);
@@ -844,6 +846,7 @@
     tr.append(protein);
     tr.append(fat);
     tr.append(calories);
+    tr.append(button);
     foodlist.appendChild(tr);
   }
 
@@ -875,7 +878,6 @@
     calories.textContent = doc.ediblePortion * 4;
 
 
-    tr.append(button);
     tr.append(namecategory);
     tr.append(food);
     tr.append(measure);
@@ -883,6 +885,7 @@
     tr.append(protein);
     tr.append(fat);
     tr.append(calories);
+    tr.append(button);
     foodlist.appendChild(tr);
   }
 
@@ -914,7 +917,6 @@
     calories.textContent = doc.ediblePortion * 4;
 
 
-    tr.append(button);
     tr.append(namecategory);
     tr.append(food);
     tr.append(measure);
@@ -922,6 +924,7 @@
     tr.append(protein);
     tr.append(fat);
     tr.append(calories);
+    tr.append(button);
     foodlist.appendChild(tr);
   }
 
@@ -952,7 +955,6 @@
     fat.textContent = Math.round(fatMilkLowFat);
     calories.textContent = doc.ediblePortion * 4;
 
-    tr.append(button);
     tr.append(namecategory);
     tr.append(food);
     tr.append(measure);
@@ -960,6 +962,7 @@
     tr.append(protein);
     tr.append(fat);
     tr.append(calories);
+    tr.append(button);
     foodlist.appendChild(tr);
   }
 
@@ -990,7 +993,6 @@
     fat.textContent = '-';
     calories.textContent = doc.ediblePortion * 4;
 
-    tr.append(button);
     tr.append(namecategory);
     tr.append(food);
     tr.append(measure);
@@ -998,6 +1000,7 @@
     tr.append(protein);
     tr.append(fat);
     tr.append(calories);
+    tr.append(button);
     foodlist.appendChild(tr);
   }
 
@@ -1028,7 +1031,6 @@
     fat.textContent = Math.round((doc.ediblePortion * 0.25) / 3);
     calories.textContent = 41;
 
-    tr.append(button);
     tr.append(namecategory);
     tr.append(food);
     tr.append(measure);
@@ -1036,6 +1038,7 @@
     tr.append(protein);
     tr.append(fat);
     tr.append(calories);
+    tr.append(button);
     foodlist.appendChild(tr);
   }
 
@@ -1066,7 +1069,6 @@
     fat.textContent = Math.round((doc.ediblePortion * 0.25) / 3);;
     calories.textContent = 86;
 
-    tr.append(button);
     tr.append(namecategory);
     tr.append(food);
     tr.append(measure);
@@ -1074,6 +1076,7 @@
     tr.append(protein);
     tr.append(fat);
     tr.append(calories);
+    tr.append(button);
     foodlist.appendChild(tr);
   }
 
@@ -1104,7 +1107,6 @@
     fat.textContent = Math.round((doc.ediblePortion * 0.25) / 3);;
     calories.textContent = 122;
 
-    tr.append(button);
     tr.append(namecategory);
     tr.append(food);
     tr.append(measure);
@@ -1112,6 +1114,7 @@
     tr.append(protein);
     tr.append(fat);
     tr.append(calories);
+    tr.append(button);
     foodlist.appendChild(tr);
   }
 
@@ -1142,7 +1145,6 @@
     fat.textContent = doc.ediblePortion;
     calories.textContent = doc.ediblePortion * 9;
 
-    tr.append(button);
     tr.append(namecategory);
     tr.append(food);
     tr.append(measure);
@@ -1150,6 +1152,7 @@
     tr.append(protein);
     tr.append(fat);
     tr.append(calories);
+    tr.append(button);
     foodlist.appendChild(tr);
   }
 
@@ -1180,7 +1183,6 @@
     fat.textContent = '-';
     calories.textContent = doc.ediblePortion * 4;
 
-    tr.append(button);
     tr.append(namecategory);
     tr.append(food);
     tr.append(measure);
@@ -1188,6 +1190,7 @@
     tr.append(protein);
     tr.append(fat);
     tr.append(calories);
+    tr.append(button);
     foodlist.appendChild(tr);
   }
 </script>
