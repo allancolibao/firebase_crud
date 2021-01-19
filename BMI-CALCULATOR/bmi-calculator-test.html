@@ -1028,7 +1028,7 @@
     carbohydrates.textContent = '-';
     protein.textContent = Math.round(proteinLowFat);
     fat.textContent = Math.round((doc.ediblePortion * 0.25) / 3);
-    calories.textContent = Math.round((Math.round(proteinLowFat) * 4) + (Math.round(doc.ediblePortion) * 4));
+    calories.textContent = Math.round((Math.round(proteinLowFat) * 4) + (Math.round((doc.ediblePortion * 0.25) / 3) * 9));
 
     tr.append(namecategory);
     tr.append(food);
@@ -1066,7 +1066,7 @@
     carbohydrates.textContent = '-';
     protein.textContent = Math.round(proteinMediumFat);
     fat.textContent = Math.round((doc.ediblePortion * 0.25) / 3);;
-    calories.textContent = Math.round((Math.round(proteinMediumFat) * 4) + (Math.round(doc.ediblePortion)) * 4);
+    calories.textContent = Math.round((Math.round(proteinMediumFat) * 4) + (Math.round((doc.ediblePortion * 0.25) / 3) * 9));
 
     tr.append(namecategory);
     tr.append(food);
@@ -1103,8 +1103,8 @@
     measure.textContent = doc.measure;
     carbohydrates.textContent = '-';
     protein.textContent = Math.round(proteinHighFat);
-    fat.textContent = Math.round((doc.ediblePortion * 0.25) / 3);;
-    calories.textContent = Math.round((Math.round(proteinHighFat) * 4) + (Math.round(doc.ediblePortion)) * 4);
+    fat.textContent = Math.round((doc.ediblePortion * 0.25) / 3);
+    calories.textContent = Math.round((Math.round(proteinHighFat) * 4) + (Math.round((doc.ediblePortion * 0.25) / 3) * 9));
 
     tr.append(namecategory);
     tr.append(food);
