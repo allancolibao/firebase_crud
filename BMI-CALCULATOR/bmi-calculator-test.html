@@ -160,6 +160,14 @@
     fats = (kcal * 0.25) / 9;
 
 
+
+
+
+
+
+
+
+
     //Carbohydrates Result
     carVegetableA = carbohydrates * 0.15;
     carVegetableB = carbohydrates * 0.15;
@@ -219,6 +227,7 @@
     }
 
     collection
+      // ok
       .where('name', '==', 'Vegetable')
       .where('nameCategory', '==', 'Group A')
       .get()
@@ -266,6 +275,9 @@
         console.error("Error getting documents: ", error);
       });
 
+
+
+
     collection
       .where('name', '==', 'Fruit')
       .where('ediblePortion', '<=', carFruit + 5)
@@ -283,11 +295,14 @@
         console.error("Error getting documents: ", error);
       });
 
+
+      
+
     collection
       .where('name', '==', 'Milk')
       .where('nameCategory', '==', 'Whole milk')
-      // .where('ediblePortion', '<=', carMilkWhole + 50)
-      // .where('ediblePortion', '>=', (carMilkWhole - 50))
+      .where('ediblePortion', '<=', carMilkWhole + 50)
+      .where('ediblePortion', '>=', (carMilkWhole - 50))
       .get()
       .then(function (querySnapshot) {
         var wholemilkarray = []
@@ -304,8 +319,8 @@
     collection
       .where('name', '==', 'Milk')
       .where('nameCategory', '==', 'Skimmed (non-fat)')
-      // .where('ediblePortion', '<=', carMilkSkimmed + 5)
-      // .where('ediblePortion', '>=', (carMilkSkimmed - 5))
+      .where('ediblePortion', '<=', carMilkSkimmed + 5)
+      .where('ediblePortion', '>=', (carMilkSkimmed - 5))
       .get()
       .then(function (querySnapshot) {
         var skimmedmilkarray = []
@@ -322,8 +337,8 @@
     collection
       .where('name', '==', 'Milk')
       .where('nameCategory', '==', 'Low fat Milk')
-      // .where('ediblePortion', '<=', carMilkLowFat + 5)
-      // .where('ediblePortion', '>=', (carMilkLowFat - 5))
+      .where('ediblePortion', '<=', carMilkLowFat + 5)
+      .where('ediblePortion', '>=', (carMilkLowFat - 5))
       .get().then((snapshot) => {
         var lowfatmilkarray = []
         snapshot.docs.forEach(doc => {
@@ -878,6 +893,7 @@
     calories.textContent = Math.round((Math.round(carMilkWhole) * 4) + (Math.round(proteinMilkWhole) * 4) + (Math.round(fatMilkWhole) * 9));
 
 
+
     tr.append(namecategory);
     tr.append(food);
     tr.append(measure);
@@ -915,6 +931,7 @@
     protein.textContent = Math.round(proteinMilkSkimmed);
     fat.textContent = Math.round(fatMilkSkimmed);
     calories.textContent = Math.round(Math.round(doc.ediblePortion * 4) + (Math.round(proteinMilkSkimmed) * 4) + (Math.round(fatMilkSkimmed) * 9));
+
 
     tr.append(namecategory);
     tr.append(food);
